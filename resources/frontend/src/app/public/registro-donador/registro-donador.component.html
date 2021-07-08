@@ -1,0 +1,106 @@
+<section fxLayout="column" fxLayoutGap="10px" fxLayoutAlign="start" style="padding:10px; height: 100%; overflow: auto; flex: 1 1 0%;">
+    <div class="loading-shade" *ngIf="isLoading"><mat-spinner></mat-spinner></div>
+    <section fxFlex fxLayout="row" >
+        <section fxFlex></section>
+        <mat-card fxFlex="75" fxLayout="column">
+            <section fxFlex="none" fxLayout="row">
+                <div fxFlex></div>
+                <mat-form-field fxFlex="60" appearance="outline" [floatLabel]="'always'">
+                    <mat-label>CURP</mat-label>
+                    <input matInput #curpInput placeholder="Por favor, teclee su CURP" type="text" maxlength="18" [(ngModel)]="CURP" (keyup.enter)="validarCurp()" autocomplete="off" [disabled]="isValidatingCURP">
+                    <button *ngIf="curpInput.value.length == 18" matSuffix mat-icon-button aria-label="Clear" (click)="validarCurp()" [class.button-spinner]="isValidatingCURP" [disabled]="isValidatingCURP">
+                        <mat-icon *ngIf="!isValidatingCURP">input</mat-icon>
+                        <mat-icon *ngIf="isValidatingCURP" class="material-icons-outlined">pending</mat-icon>
+                    </button>
+                    <button *ngIf="isValidatingCURP" mat-icon-button matPrefix (click)="validarCurp()"><mat-icon>clear</mat-icon></button>
+                    <mat-hint align="end">{{curpInput.value.length}} / 18</mat-hint>
+                </mat-form-field>
+                <div fxFlex></div>
+            </section>
+            
+            <section fxflex="none" fxLayout="column">
+                <div fxFlex fxLayout="row" fxLayoutGap="5px">
+                    <mat-form-field fxFlex="33">
+                        <mat-label>CURP</mat-label>
+                        <input matInput>
+                        <mat-hint align="end">{{curpInput.value.length}} / 18</mat-hint>
+                    </mat-form-field>
+                </div>
+                <div fxFlex fxLayout="row" fxLayoutGap="5px">
+                    <mat-form-field fxFlex>
+                        <mat-label>Nombre(s)</mat-label>
+                        <input matInput>
+                    </mat-form-field>
+                    <mat-form-field fxFlex>
+                        <mat-label>Apellido Paterno</mat-label>
+                        <input matInput>
+                    </mat-form-field>
+                    <mat-form-field fxFlex>
+                        <mat-label>Apellido Materno</mat-label>
+                        <input matInput>
+                    </mat-form-field>
+                </div>
+                <div fxFlex fxLayout="row" fxLayoutGap="5px">
+                    <mat-form-field fxFlex>
+                        <mat-label>Fecha de Nacimiento</mat-label>
+                        <input matInput type="date">
+                    </mat-form-field>
+                    <mat-form-field fxFlex="10">
+                        <mat-label>Edad</mat-label>
+                        <input matInput type="number" readonly>
+                    </mat-form-field>
+                    <mat-form-field fxFlex="15">
+                        <mat-label>Sexo</mat-label>
+                        <mat-select>
+                            <mat-option value="M">Masculino</mat-option>
+                            <mat-option value="F">Femenino</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field fxFlex>
+                        <mat-label>Derechohabiencia</mat-label>
+                        <mat-select>
+                            <mat-option value="1">Seguros</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div fxFlex fxLayout="row" fxLayoutGap="5px">
+                    <mat-form-field fxFlex>
+                        <mat-label>Estado</mat-label>
+                        <mat-select>
+                            <mat-option value="1">Estados</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field fxFlex>
+                        <mat-label>Ciudad</mat-label>
+                        <input matInput>
+                    </mat-form-field>
+                    <mat-form-field fxFlex>
+                        <mat-label>Codigo Postal</mat-label>
+                        <input matInput>
+                    </mat-form-field>
+                </div>
+                <div fxFlex fxLayout="row" fxLayoutGap="5px">
+                    <mat-form-field fxFlex>
+                        <mat-label>Correo Electronico</mat-label>
+                        <input matInput>
+                    </mat-form-field>
+                    <mat-form-field fxFlex>
+                        <mat-label>Telefono de Contacto</mat-label>
+                        <input matInput>
+                    </mat-form-field>
+                </div>
+            </section>
+            <section fxFlex="none" fxLayout="row" fxLayoutGap="5px">
+                <div fxFlex></div>
+                <div fxFlex="none">
+                    <button mat-button>Cancelar</button>
+                </div>
+                <div fxFlex="none">
+                    <button mat-raised-button color="primary">Guardar</button>
+                </div>
+            </section>
+            
+        </mat-card>
+        <section fxFlex></section>
+    </section>
+</section>
