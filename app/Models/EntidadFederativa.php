@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class EntidadFederativa extends Model
 {
-    use SoftDeletes;
-    protected $table = 'entidades_fecerativas';
+    //use SoftDeletes;
+    protected $table = 'entidades_federativas';
     protected $fillable = ['clave','nombre'];
 }

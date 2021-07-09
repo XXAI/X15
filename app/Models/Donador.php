@@ -9,13 +9,25 @@ class Donador extends Model
 {
     use SoftDeletes;
     protected $table = 'donadores';
-    protected $fillable = ['nombre','apellido_paterno','apellido_materno','fecha_nacimiento','curp','sexo','seguro_id','seguro_otro','entidad_federativa_id','ciudad','codigo_postal','email','telefono_contacto'];
+    protected $fillable = [
+        
+        'id',
+        'nombre',
+        'a_paterno',
+        'a_materno',
+        'fecha_nacimiento',
+        'curp',
+        'genero',
+        'codigo_postal',
+        'ciudad',
+        'estado_id',
+        'email',
+        'telefono_contacto'
 
-    public function seguro(){
-        return $this->belongsTo('App\Models\Seguro','seguro_id');
+    ];
+
+    public function estado(){
+        return $this->belongsTo('App\Models\entidades_federativas','estado_id');
     }
 
-    public function entidadFederativa(){
-        return $this->belongsTo('App\Models\EntidadFederativa','entidad_federativa_id');
-    }
 }

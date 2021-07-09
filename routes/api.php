@@ -29,6 +29,9 @@ Route::post('refresh',  'API\Auth\AuthController@refresh');
  */
 Route::get('enviar-recuperar-pass',             'API\Admin\MailerController@enviarRecuperarContrasena');
 
+Route::post('catalogos',                        'API\Catalogos\BusquedaCatalogosController@obtenerCatalogos');
+Route::apiResource('donadores','API\Modulos\DonadoresController');
+
 Route::group(['middleware'=>'auth'],function($router){
     Route::apiResource('user',          'API\Admin\UserController');
     Route::get('user-catalogs',         'API\Admin\UserController@getCatalogs');
@@ -51,7 +54,10 @@ Route::group(['middleware'=>'auth'],function($router){
      */
     Route::get('ejecutar-query',                    'API\Admin\DevReporterController@executeQuery');
     Route::get('exportar-query',                    'API\Admin\DevReporterController@exportExcel');
-    
+
+    /**
+     * Catalogo
+     */
 });
 
 Route::middleware('auth')->get('/avatar-images', function (Request $request) {

@@ -1,12 +1,14 @@
 /// <reference lib="webworker" />
 import pdfMake from 'pdfmake/build/pdfmake';
 import pdfFonts from 'pdfmake/build/vfs_fonts';
-import { ReportePersonalActivo } from './reporte-personal-activo';
+import { ReporteRegistroDonante } from './registro-donante';
 
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 const reportes = {
-  'empleados/personal-activo': new ReportePersonalActivo()
+
+  '/registro-donante' : new ReporteRegistroDonante(),
+
 };
 
 addEventListener('message', ({ data }) => {
