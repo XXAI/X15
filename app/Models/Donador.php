@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+//use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Donador extends Model
 {
-    use SoftDeletes;
+    //use SoftDeletes;
     protected $table = 'donadores';
     protected $fillable = [
         
@@ -27,7 +27,7 @@ class Donador extends Model
     ];
 
     public function estado(){
-        return $this->belongsTo('App\Models\entidades_federativas','estado_id');
+        return $this->belongsTo('App\Models\EntidadFederativa','estado_id');
     }
 
 }

@@ -10,7 +10,7 @@ import { map } from 'rxjs/operators';
 export class PublicService {
 
   url                                     = `${environment.base_url}/donadores`;                         
-  url_info_donante                        = `${environment.base_url}/ver-info-donante/`;
+  url_info_donante                        = `${environment.base_url}/qr-donador/`;
   // url_catalogo_diagnostico_autocomplet    = `${environment.base_url}/busqueda-diagnosticos`;
   url_personas_callcenter                 = `http://contingencia.saludchiapas.gob.mx/api/search-personas`;
   url_id_persona_callCenter               = `http://contingencia.saludchiapas.gob.mx/api/search-personas`;

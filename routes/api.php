@@ -30,7 +30,8 @@ Route::post('refresh',  'API\Auth\AuthController@refresh');
 Route::get('enviar-recuperar-pass',             'API\Admin\MailerController@enviarRecuperarContrasena');
 
 Route::post('catalogos',                        'API\Catalogos\BusquedaCatalogosController@obtenerCatalogos');
-Route::apiResource('donadores','API\Modulos\DonadoresController');
+Route::apiResource('donadores', 'API\Modulos\DonadoresController');
+Route::get('qr-donador/{id}',      'API\Modulos\DonadoresController@obtenerDatosDonante');
 
 Route::group(['middleware'=>'auth'],function($router){
     Route::apiResource('user',          'API\Admin\UserController');

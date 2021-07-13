@@ -1,0 +1,103 @@
+<div *ngIf="isLoading">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar><br>
+    <h3>Cargando datos del Donante, Espere un momento...</h3>    
+</div>
+
+
+<section  *ngIf="!isLoading" class="form-container; update-pass" fxLayout fxLayoutAlign="center center" >
+  
+    <div fxLayout fxLayoutAlign="center center">
+  
+      <mat-card fxFlex.xs="100%" fxFlex="800px">
+        <mat-card-title fxLayoutAlign="center"></mat-card-title>
+        <mat-card-content fxLayout="column" fxLayout fxLayoutAlign="center center">
+
+
+            <div>
+
+                <div fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap.gt-sm="10px">
+                    <h2 fxFlex><mat-icon>assignment_ind</mat-icon> Información del Donante: </h2>
+                </div>
+            
+                <div fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap.gt-sm="10px">
+            
+                    <mat-form-field fxFlex="25%" appearance="fill">
+                        <mat-label>N°: </mat-label>
+                        <input matInput value="{{dataDonante.id}}" readonly>
+                    </mat-form-field>
+            
+                    <mat-form-field fxFlex appearance="fill">
+                        <mat-label>CURP: </mat-label>
+                        <input matInput value="{{ dataDonante.curp }}" readonly>
+                    </mat-form-field>
+            
+                </div>
+            
+                <div fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap.gt-sm="10px">
+            
+                    <mat-form-field fxFlex appearance="fill">
+                        <mat-label>Nombre: </mat-label>
+                        <input matInput value="{{ dataDonante.nombre }} {{ dataDonante.a_paterno }} {{ dataDonante.a_materno }}" readonly>
+                    </mat-form-field>
+            
+                    <mat-form-field fxFlex appearance="fill">
+                        <mat-label>Fecha de Nacimiento: </mat-label>
+                        <input matInput value="{{ dataDonante.fecha_nacimiento | date: 'dd/MM/yyyy' }}" readonly>
+                    </mat-form-field>
+            
+                </div>
+            
+                <div fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap.gt-sm="10px">
+            
+                    <mat-form-field fxFlex appearance="fill">
+                        <mat-label>Genero: </mat-label>
+                        <input matInput value="{{(dataDonante.genero == 'M') ? 'MASCULINO' :'FEMENINO'}}" readonly>
+                    </mat-form-field>
+            
+                    <mat-form-field fxFlex appearance="fill">
+                        <mat-label>Correo Electrónico: </mat-label>
+                        <input matInput value="{{ dataDonante.email }}" readonly>
+                    </mat-form-field>
+            
+                    <mat-form-field fxFlex appearance="fill">
+                        <mat-label>Télefono de Contacto: </mat-label>
+                        <input matInput value="{{ dataDonante.telefono_contacto }}" readonly>
+                    </mat-form-field>
+            
+                </div>
+            
+                <div *ngIf="dataDonante.esExtranjero == 0" fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap.gt-sm="10px">
+            
+                    <mat-form-field fxFlex appearance="fill">
+                        <mat-label>Código Postal: </mat-label>
+                        <input matInput value="{{(dataDonante.codigo_postal != null) ? dataDonante.codigo_postal : 'N/A'}}" readonly>
+                    </mat-form-field>
+            
+                    <mat-form-field fxFlex appearance="fill">
+                        <mat-label>Cuidad: </mat-label>
+                        <input matInput value="{{ dataDonante.ciudad }} " readonly>
+                    </mat-form-field>
+            
+                    <mat-form-field fxFlex appearance="fill">
+                        <mat-label>Estado de la Republica: </mat-label>
+                        <input matInput value="{{(dataDonante.estado != null) ? dataDonante.estado.nombre : 'NO ASIGNADO'}}" readonly>
+                    </mat-form-field>
+            
+                </div>
+            
+            
+                <mat-divider></mat-divider>
+            
+            </div>
+
+    
+        </mat-card-content>
+    
+        <mat-card-actions fxLayout="column" fxAlignItems="center" fxLayoutGap="10px">
+          <!-- <a mat-button routerLink="/">Regresar para iniciar sesión</a> -->
+        </mat-card-actions>
+  
+      </mat-card>
+    </div>
+  
+  </section>

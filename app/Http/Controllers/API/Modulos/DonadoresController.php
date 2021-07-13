@@ -138,4 +138,23 @@ class DonadoresController extends Controller
     {
         //
     }
+
+    public function obtenerDatosDonante($id){
+        try{
+            
+            //$params = $request->all();
+
+            $donante = Donador::with('estado')->where('id',$id)->first();
+
+            if(!$donante){
+                throw new Exception("No encontro al Donante buscado", 1);
+            }
+            
+            return response()->json(['data'=>$donante],HttpResponse::HTTP_OK);
+        }catch(\Exception $e){
+            return response()->json(['error'=>['message'=>$e->getMessage(),'line'=>$e->getLine()]], HttpResponse::HTTP_CONFLICT);
+        }
+    }
+
+    
 }

@@ -9,18 +9,24 @@ import { getEspPaginatorIntl } from 'src/app/esp-paginator-intl';
 
 import { PublicRoutingModule } from './public-routing.module';
 import { RegistroDonadorComponent } from './registro-donador/registro-donador.component';
-
+import { InfoQrDonanteComponent } from './info-qr-donante/info-qr-donante.component';
 
 
 
 @NgModule({
-  declarations: [RegistroDonadorComponent],
+  declarations: [
+    RegistroDonadorComponent,
+    InfoQrDonanteComponent
+  ],
   imports: [
     CommonModule,
     SharedModule,
     MatNativeDateModule,
     MatDatepickerModule,
     PublicRoutingModule
+  ],
+  entryComponents:[
+    InfoQrDonanteComponent
   ],
   providers:[
     { provide: MAT_DATE_LOCALE, useValue: 'es-MX'},
