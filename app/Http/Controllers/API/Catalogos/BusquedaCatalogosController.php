@@ -7,6 +7,7 @@ use Illuminate\Http\Response as HttpResponse;
 use App\Http\Controllers\Controller;
 
 use App\Models\EntidadFederativa;
+use App\Models\Seguro;
 
 
 
@@ -18,7 +19,8 @@ class BusquedaCatalogosController extends Controller
         try {
             $listado_catalogos = [
                 
-                'estados'                     => EntidadFederativa::getModel(),             
+                'estados'                     => EntidadFederativa::getModel(),
+                'seguros'                     => Seguro::getModel(),       
 
             ];
 

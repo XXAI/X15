@@ -10,13 +10,15 @@ import { getEspPaginatorIntl } from 'src/app/esp-paginator-intl';
 import { PublicRoutingModule } from './public-routing.module';
 import { RegistroDonadorComponent } from './registro-donador/registro-donador.component';
 import { InfoQrDonanteComponent } from './info-qr-donante/info-qr-donante.component';
+import { ListaDonadoresComponent } from './lista-donadores/lista-donadores.component';
 
 
 
 @NgModule({
   declarations: [
     RegistroDonadorComponent,
-    InfoQrDonanteComponent
+    InfoQrDonanteComponent,
+    ListaDonadoresComponent
   ],
   imports: [
     CommonModule,

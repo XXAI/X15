@@ -28,7 +28,7 @@ import { AuthService } from '../../auth/auth.service';
 @Component({
   selector: 'lista-donadores',
   templateUrl: './lista-donadores.component.html',
-  styleUrls: ['./lista.-donadores.component.css'],
+  styleUrls: ['./lista-donadores.component.css'],
   animations: [
     trigger('buttonInOut', [
         transition('void => *', [

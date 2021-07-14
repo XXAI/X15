@@ -281,7 +281,7 @@
                             <ng-container matColumnDef="atencion">
                                 <th mat-header-cell *matHeaderCellDef >Atención Ambulatoria</th>
                                 <td mat-cell *matCellDef="let row; let i = index" >
-                                    <button  *ngIf="row.ultima_atencion == null  || row.tieneAtencion == 0 || row.ultima_atencion.dadodeAlta == 1" mat-stroked-button color="primary" (click)="openDialogFormAtencion(row.id,i)"  matTooltip="Generar Atención Ambulatoria"><mat-icon>elderly</mat-icon></button>
+                                    <!-- <button  *ngIf="row.ultima_atencion == null  || row.tieneAtencion == 0 || row.ultima_atencion.dadodeAlta == 1" mat-stroked-button color="primary" (click)="openDialogFormAtencion(row.id,i)"  matTooltip="Generar Atención Ambulatoria"><mat-icon>elderly</mat-icon></button> -->
                                 </td>
                             </ng-container>
 
@@ -299,10 +299,10 @@
                                 </td>
                             </ng-container> -->
 
-                            <ng-container matColumnDef="opciones" >
+                            <!-- <ng-container matColumnDef="opciones" >
                                 <th mat-header-cell *matHeaderCellDef>Opciones</th>
                                 <td mat-cell *matCellDef="let row; let i = index">
-                                    <!--<button mat-stroked-button color="primary" matTooltip="Editar Trabajador" (click)="editTrabajador(i)" routerLink="/trabajadores/editar/{{row.id}}"><mat-icon>edit</mat-icon></button>&nbsp;-->
+                                    <button mat-stroked-button color="primary" matTooltip="Editar Trabajador" (click)="editTrabajador(i)" routerLink="/trabajadores/editar/{{row.id}}"><mat-icon>edit</mat-icon></button>&nbsp;
                                     
                                     <button mat-button mat-stroked-button [matMenuTriggerFor]="menu" *ngIf="row.estatus != 3">Opciones</button>
                                     <mat-menu #menu="matMenu">
@@ -312,7 +312,7 @@
                                     </mat-menu>
                                     
                                 </td>
-                            </ng-container>
+                            </ng-container> -->
 
                             <ng-container matColumnDef="noResultsFound">
                                 <td mat-footer-cell *matFooterCellDef [attr.colspan]="displayedColumns.length">

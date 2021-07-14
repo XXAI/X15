@@ -33,7 +33,7 @@ export class InfoQrDonanteComponent implements OnInit {
   panelEmabarazo    = false;
   panelOpenState    = false;
 
-  dataDonante: any;
+  dataDonante: any = null;
   persona_id:number = 0;
 
   isLoading:boolean = false;
@@ -45,6 +45,8 @@ export class InfoQrDonanteComponent implements OnInit {
       this.persona_id = params['id'];
       if(this.persona_id){
 
+        console.log("QWE",this.persona_id);
+        console.log("datos donante",this.dataDonante);
         this.cargarDatosPaciente(this.persona_id);
 
       }
@@ -73,10 +75,25 @@ export class InfoQrDonanteComponent implements OnInit {
         
         this.dataDonante = response.data;
 
-        console.log(this.dataDonante);
+        console.log("datos donante",this.dataDonante);
 
         this.isLoading = false;
-      });
+      },
+      errorResponse => {
+        console.log(errorResponse);
+
+        if(errorResponse.status == 409){
+
+          var Message = errorResponse.error.error.message;
+          this.sharedService.showSnackBar(Message, 'Cerrar', 6000);
+
+          this.isLoading = false;
+
+        }
+          this.isLoading = false;
+      }
+    );
+
   }
 
 

@@ -67,16 +67,19 @@ export class RegistroDonadorComponent implements OnInit {
 
       id:[''],
       nombre:['JAVIER ALEJANDRO',Validators.required],
-      a_paterno:['GOSAIN'],
-      a_materno:['DÍAZ'],
+      apellido_paterno:['GOSAIN'],
+      apellido_materno:['DÍAZ'],
       edad:['33',Validators.required],
       fecha_nacimiento:['1988-08-27',Validators.required],
       curp:['GODJ880827HDFSZV05', Validators.pattern(/^([A-Z][AEIOUX][A-Z]{2}\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])[HM](?:AS|B[CS]|C[CLMSH]|D[FG]|G[TR]|HG|JC|M[CNS]|N[ETL]|OC|PL|Q[TR]|S[PLR]|T[CSL]|VZ|YN|ZS)[B-DF-HJ-NP-TV-Z]{3}[A-Z\d])(\d)$/)],
-      genero:['M',Validators.required],
+      sexo:['M',Validators.required],
       codigo_postal:['29050',Validators.required],
       ciudad:['TUX',Validators.required],
-      estado:[''],
-      estado_id:['7',Validators.required],
+      entidad_federativa:[''],
+      entidad_federativa_id:['7',Validators.required],
+      seguro:[''],
+      seguro_id:['',Validators.required],
+      seguro_otro:[''],
       email: ['ASD@HOTMAIL.COM', [Validators.required, Validators.email]],
       telefono_contacto:['6125475'],
 
@@ -104,6 +107,7 @@ export class RegistroDonadorComponent implements OnInit {
 
     let carga_catalogos = [
       {nombre:'estados',orden:'nombre'},
+      {nombre:'seguros',orden:'descripcion'},
     ];
 
     this.publicService.obtenerCatalogos(carga_catalogos).subscribe(
@@ -111,11 +115,13 @@ export class RegistroDonadorComponent implements OnInit {
 
         this.catalogos = response.data;
 
-        this.filteredCatalogs['estados'] = this.donadoresForm.get('estado_id').valueChanges.pipe(startWith(''),map(value => this._filter(value,'estados','nombre')));
+        this.filteredCatalogs['estados'] = this.donadoresForm.get('entidad_federativa_id').valueChanges.pipe(startWith(''),map(value => this._filter(value,'estados','nombre')));
+        this.filteredCatalogs['seguros'] = this.donadoresForm.get('seguro_id').valueChanges.pipe(startWith(''),map(value => this._filter(value,'seguros','descripcion')));
+
       
         if(obj)
         {
-          //this.donadoresForm.get('estado_id').setValue(obj.estado);
+          //this.donadoresForm.get('entidad_federativa_id').setValue(obj.estado);
         }
         this.isLoading = false; 
       } 
@@ -184,8 +190,12 @@ export class RegistroDonadorComponent implements OnInit {
 
     let formData =  JSON.parse(JSON.stringify(this.donadoresForm.value));
 
-    if(formData.estado_id){
-      formData.estado_id = formData.estado_id.id;
+    if(formData.entidad_federativa_id){
+      formData.entidad_federativa_id = formData.entidad_federativa_id.id;
+    }
+
+    if(formData.seguro_id){
+      formData.seguro_id = formData.seguro_id.id;
     }
 
     // let datoGuardado = {
@@ -203,7 +213,7 @@ export class RegistroDonadorComponent implements OnInit {
 
           var Message = "";            
 
-          Message = "Se Editaron los datos del Donante: "+" "+response.data.nombre+" "+response.data.a_paterno+" "+response.data.a_materno+" "+" con Éxito!";
+          Message = "Se Editaron los datos del Donante: "+" "+response.data.nombre+" "+response.data.apellido_paterno+" "+response.data.apellido_materno+" "+" con Éxito!";
 
           this.sharedService.showSnackBar(Message, 'Cerrar', 5000);
           this.router.navigate(['/registro']);

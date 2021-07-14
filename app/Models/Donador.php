@@ -13,21 +13,27 @@ class Donador extends Model
         
         'id',
         'nombre',
-        'a_paterno',
-        'a_materno',
+        'apellido_paterno',
+        'apellido_materno',
         'fecha_nacimiento',
         'curp',
-        'genero',
-        'codigo_postal',
+        'sexo',
+        'seguro_id',
+        'seguro_otro',
+        'entidad_federativa_id',
         'ciudad',
-        'estado_id',
+        'codigo_postal',
         'email',
         'telefono_contacto'
 
     ];
 
-    public function estado(){
-        return $this->belongsTo('App\Models\EntidadFederativa','estado_id');
+    public function entidad_federativa(){
+        return $this->belongsTo('App\Models\EntidadFederativa','entidad_federativa_id');
+    }
+
+    public function seguro(){
+        return $this->belongsTo('App\Models\Seguro','seguro_id');
     }
 
 }

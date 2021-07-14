@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
 use App\Http\Controllers\Controller;
 use Carbon\carbon;
-use \Validator;
+use \Validator, Exception;
 use App\Models\Donador;
 use App\Exports\DonadoresExport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -23,18 +23,18 @@ class DonadoresController extends Controller
         $parametros = $request->all();
 
         $lista_donadores = Donador::select('donadores.*','entidades_federativas.nombre as estado')
-                            ->leftJoin('entidades_federativas','entidades_federativas.id','=','donadores.estado_id');
+                            ->leftJoin('entidades_federativas','entidades_federativas.id','=','donadores.entidad_federativa_id');
 
-        if(isset($parametros['tipo_genero']) && $parametros['tipo_genero']){
-            $lista_donadores = $lista_donadores->where('genero',$parametros['tipo_genero']);
+        if(isset($parametros['tipo_sexo']) && $parametros['tipo_sexo']){
+            $lista_donadores = $lista_donadores->where('sexo',$parametros['tipo_sexo']);
         }
 
         if(isset($parametros['buscar']) && $parametros['buscar']){
             $query_busqueda = $parametros['buscar'];
             $lista_donadores = $lista_donadores->where(function($query)use($query_busqueda){
                 $query->where('donadores.nombre','like','%'.$query_busqueda.'%')
-                        ->orWhere('a_paterno','like','%'.$query_busqueda.'%')
-                        ->orWhere('a_materno','like','%'.$query_busqueda.'%')
+                        ->orWhere('apellido_paterno','like','%'.$query_busqueda.'%')
+                        ->orWhere('apellido_materno','like','%'.$query_busqueda.'%')
                         ->orWhere('ciudad','like','%'.$query_busqueda.'%')
                         ->orWhere('codigo_postal','like','%'.$query_busqueda.'%')
                         ->orWhere('curp','like','%'.$query_busqueda.'%');
@@ -63,14 +63,14 @@ class DonadoresController extends Controller
 
         $reglas = [
             'nombre' => 'required|max:255',
-            'a_paterno' => 'nullable',
-            'a_materno' => 'nullable',
+            'apellido_paterno' => 'nullable',
+            'apellido_materno' => 'nullable',
             'fecha_nacimiento' => 'required|date' ,
             'curp' => 'required|size:18',
-            'genero' => 'required',
+            'sexo' => 'required',
             'codigo_postal' => 'required',
             'ciudad' => 'required',
-            'estado_id' => 'required',
+            'entidad_federativa_id' => 'required',
             'email' => 'required|email',
             'telefono_contacto' => 'nullable',
         ];
@@ -80,10 +80,10 @@ class DonadoresController extends Controller
             'fecha_nacimiento.required'  => 'La fecha de nacimiento es requerida.',
             'curp.required' => 'La CURP es requerida.',
             'curp.size' => 'La CURP debe tener :size caracteres de largo',
-            'genero.required' => 'El genero es requerido.',
+            'sexo.required' => 'El sexo es requerido.',
             'codigo_postal.required' => 'El codigo postal es requerido.',
             'ciudad.required' => 'La ciudad es requerida.',
-            'estado_id.required' => 'El estado es requerido.',
+            'entidad_federativa_id.required' => 'El estado es requerido.',
             'email.required' => 'El correo electronico es requerido.',
             'email.email' => 'El correo electronico no tiene el formato correcto.',
         ];
@@ -147,7 +147,7 @@ class DonadoresController extends Controller
             $donante = Donador::with('estado')->where('id',$id)->first();
 
             if(!$donante){
-                throw new Exception("No encontro al Donante buscado", 1);
+                throw new Exception("No se encontro al Donante con este Código QR", 1);
             }
             
             return response()->json(['data'=>$donante],HttpResponse::HTTP_OK);

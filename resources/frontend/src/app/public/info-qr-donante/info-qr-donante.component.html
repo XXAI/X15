@@ -13,10 +13,14 @@
         <mat-card-content fxLayout="column" fxLayout fxLayoutAlign="center center">
 
 
-            <div>
+            <div *ngIf="dataDonante != null">
+
+                <div style="margin:15px">
+                    <mat-icon class="qr-encontrado" style="transform: scale(4); margin:1em;">check_circle</mat-icon>
+                </div>
 
                 <div fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap.gt-sm="10px">
-                    <h2 fxFlex><mat-icon>assignment_ind</mat-icon> Información del Donante: </h2>
+                    <h2 fxFlex><mat-icon>assignment_ind</mat-icon> ¡Donante Encontrado!</h2>
                 </div>
             
                 <div fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap.gt-sm="10px">
@@ -37,7 +41,7 @@
             
                     <mat-form-field fxFlex appearance="fill">
                         <mat-label>Nombre: </mat-label>
-                        <input matInput value="{{ dataDonante.nombre }} {{ dataDonante.a_paterno }} {{ dataDonante.a_materno }}" readonly>
+                        <input matInput value="{{ dataDonante.nombre }} {{ dataDonante.apellido_paterno }} {{ dataDonante.apellido_materno }}" readonly>
                     </mat-form-field>
             
                     <mat-form-field fxFlex appearance="fill">
@@ -46,17 +50,21 @@
                     </mat-form-field>
             
                 </div>
+
+                <div fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap.gt-sm="10px">
+
+                    <mat-form-field fxFlex appearance="fill">
+                        <mat-label>Correo Electrónico: </mat-label>
+                        <input matInput value="{{ dataDonante.email }}" readonly>
+                    </mat-form-field>
+
+                </div>
             
                 <div fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap.gt-sm="10px">
             
                     <mat-form-field fxFlex appearance="fill">
-                        <mat-label>Genero: </mat-label>
-                        <input matInput value="{{(dataDonante.genero == 'M') ? 'MASCULINO' :'FEMENINO'}}" readonly>
-                    </mat-form-field>
-            
-                    <mat-form-field fxFlex appearance="fill">
-                        <mat-label>Correo Electrónico: </mat-label>
-                        <input matInput value="{{ dataDonante.email }}" readonly>
+                        <mat-label>sexo: </mat-label>
+                        <input matInput value="{{(dataDonante.sexo == 'M') ? 'MASCULINO' :'FEMENINO'}}" readonly>
                     </mat-form-field>
             
                     <mat-form-field fxFlex appearance="fill">
@@ -66,7 +74,7 @@
             
                 </div>
             
-                <div *ngIf="dataDonante.esExtranjero == 0" fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap.gt-sm="10px">
+                <div fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap.gt-sm="10px">
             
                     <mat-form-field fxFlex appearance="fill">
                         <mat-label>Código Postal: </mat-label>
@@ -90,11 +98,25 @@
             
             </div>
 
+            <div *ngIf="dataDonante == null">
+
+                <div style="margin:15px">
+                    <mat-icon class="qr-no-encontrado" style="transform: scale(4); margin:1em;">cancel</mat-icon>
+                </div>
+    
+                <div fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap.gt-sm="10px">
+                    <h2 fxFlex> ¡No se encontraron datos con este Código QR!</h2>
+                </div>
+
+                <mat-divider></mat-divider>
+
+            </div>
+
     
         </mat-card-content>
     
-        <mat-card-actions fxLayout="column" fxAlignItems="center" fxLayoutGap="10px">
-          <!-- <a mat-button routerLink="/">Regresar para iniciar sesión</a> -->
+        <mat-card-actions fxLayout="row" fxLayout fxLayoutAlign="center center" fxLayoutGap="10px">
+          <a mat-raised-button color="primary" routerLink="donadores"><mat-icon>search</mat-icon> Buscar Donadores</a>
         </mat-card-actions>
   
       </mat-card>
