@@ -144,7 +144,7 @@ class DonadoresController extends Controller
             
             //$params = $request->all();
 
-            $donante = Donador::with('estado')->where('id',$id)->first();
+            $donante = Donador::with('entidad_federativa', 'seguro')->where('id',$id)->first();
 
             if(!$donante){
                 throw new Exception("No se encontro al Donante con este Código QR", 1);
