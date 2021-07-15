@@ -131,7 +131,7 @@ export class ReporteRegistroDonante{
                 // { text: "", colSpan:4},{},{},{},
               ],
               [
-                { qr: 'http://donadores.saludchiapas.gob.mx/'+donante.id, fit: '85', style: "texto_centro", colSpan:4},{},{},{},
+                { qr: 'http://donadores.saludchiapas.gob.mx/#/qr-donante/'+donante.id, fit: '85', style: "texto_centro", colSpan:4},{},{},{},
                 { text: "A mi familia: Es mi voluntad que mi fallecimiento y con la esperanza De ayudar a salvar vidas, sean donados mis órganos y tejidos con fines de trasplante. Cuando esto suceda, Apoyen mi decisión y ayuden a cumplir mi voluntad.", style: "texto_anotacion", colSpan:3},{},{},
 
               ],
