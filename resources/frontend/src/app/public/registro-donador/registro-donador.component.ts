@@ -53,7 +53,7 @@ export class RegistroDonadorComponent implements OnInit {
 
   ngOnInit() {
 
-    this.CURP = 'GODJ880827HDFSZV05';
+    this.CURP = '';
     // this.firstFormGroup = this._formBuilder.group({
     //   firstCtrl: ['', Validators.required]
     // });
@@ -66,22 +66,22 @@ export class RegistroDonadorComponent implements OnInit {
     this.donadoresForm = this.fb.group ({
 
       id:[''],
-      nombre:['JAVIER ALEJANDRO',Validators.required],
-      apellido_paterno:['GOSAIN'],
-      apellido_materno:['DÍAZ'],
-      edad:['33',Validators.required],
-      fecha_nacimiento:['1988-08-27',Validators.required],
-      curp:['GODJ880827HDFSZV05', Validators.pattern(/^([A-Z][AEIOUX][A-Z]{2}\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])[HM](?:AS|B[CS]|C[CLMSH]|D[FG]|G[TR]|HG|JC|M[CNS]|N[ETL]|OC|PL|Q[TR]|S[PLR]|T[CSL]|VZ|YN|ZS)[B-DF-HJ-NP-TV-Z]{3}[A-Z\d])(\d)$/)],
-      sexo:['M',Validators.required],
-      codigo_postal:['29050',Validators.required],
-      ciudad:['TUX',Validators.required],
+      nombre:['',Validators.required],
+      apellido_paterno:[''],
+      apellido_materno:[''],
+      edad:['',Validators.required],
+      fecha_nacimiento:['',Validators.required],
+      curp:['', Validators.pattern(/^([A-Z][AEIOUX][A-Z]{2}\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])[HM](?:AS|B[CS]|C[CLMSH]|D[FG]|G[TR]|HG|JC|M[CNS]|N[ETL]|OC|PL|Q[TR]|S[PLR]|T[CSL]|VZ|YN|ZS)[B-DF-HJ-NP-TV-Z]{3}[A-Z\d])(\d)$/)],
+      sexo:['',Validators.required],
+      codigo_postal:['',Validators.required],
+      ciudad:['',Validators.required],
       entidad_federativa:[''],
       entidad_federativa_id:['7',Validators.required],
       seguro:[''],
       seguro_id:['',Validators.required],
       seguro_otro:[''],
-      email: ['ASD@HOTMAIL.COM', [Validators.required, Validators.email]],
-      telefono_contacto:['6125475'],
+      email: ['', [Validators.required, Validators.email]],
+      telefono_contacto:[''],
 
     });
 

@@ -74,7 +74,7 @@ export class ListaDonadoresComponent implements OnInit {
     '4':'swap_horizontal_circle' //en transferencia
   };
 
-  displayedColumns: string[] = ['nombre', 'edad', 'procedencia', 'atencion', 'opciones'];
+  displayedColumns: string[] = ['nombre', 'fecha_nacimiento', 'curp', 'qr'];
   dataSource: any = [];
   dataSourceFilters: any = [];
 
@@ -428,6 +428,7 @@ export class ListaDonadoresComponent implements OnInit {
 
     this.publicService.getDonantesList(params).subscribe(
       response =>{
+        console.log("aca", response.data.data);
         if(response.error) {
           let errorMessage = response.error.message;
           this.sharedService.showSnackBar(errorMessage, null, 3000);
@@ -435,7 +436,7 @@ export class ListaDonadoresComponent implements OnInit {
           if(response.data.total > 0){
             this.dataSource = response.data.data;
             this.fechaActual = response.fecha_actual;
-            this.resultsLength = response.data.total;
+            this.resultsLength = response.total;
           }else{
             this.dataSource = [];
             this.resultsLength = 0;
@@ -750,6 +751,90 @@ export class ListaDonadoresComponent implements OnInit {
       }
     );
   }
+  }
+
+  QRDonante(obj, index){
+
+    console.log("acaaa",obj);
+
+    this.selectedItemIndex = index;
+
+      //this.showMyStepper = true;
+      this.isLoadingPDF = true;
+      this.showMyStepper = true;
+      this.showReportForm = false;
+
+      let params:any = {};
+      let countFilter = 0;
+      let fecha_reporte = new Intl.DateTimeFormat('es-ES', {year: 'numeric', month: 'numeric', day: '2-digit'}).format(new Date());
+
+      let appStoredData = this.sharedService.getArrayDataFromCurrentApp(['searchQuery','filter']);
+      
+      params.reporte = 'registro-donador';
+      if(appStoredData['searchQuery']){
+        params.query = appStoredData['searchQuery'];
+      }
+      this.stepperConfig = {
+        steps:[
+          {
+            status: 1, //1:standBy, 2:active, 3:done, 0:error
+            label: { standBy: 'Cargar Datos', active: 'Cargando Datos', done: 'Datos Cargados' },
+            icon: 'settings_remote',
+            errorMessage: '',
+          },
+          {
+            status: 1, //1:standBy, 2:active, 3:done, 0:error
+            label: { standBy: 'Generar PDF', active: 'Generando PDF', done: 'PDF Generado' },
+            icon: 'settings_applications',
+            errorMessage: '',
+          },
+          {
+            status: 1, //1:standBy, 2:active, 3:done, 0:error
+            label: { standBy: 'Descargar Archivo', active: 'Descargando Archivo', done: 'Archivo Descargado' },
+            icon: 'save_alt',
+            errorMessage: '',
+          },
+        ],
+        currentIndex: 0
+      }
+
+
+      this.stepperConfig.steps[0].status = 2;
+
+      this.stepperConfig.steps[0].status = 3;
+      this.stepperConfig.steps[1].status = 2;
+      this.stepperConfig.currentIndex = 1;
+
+      const reportWorker = new ReportWorker();
+      reportWorker.onmessage().subscribe(
+        data => {
+          this.stepperConfig.steps[1].status = 3;
+          this.stepperConfig.steps[2].status = 2;
+          this.stepperConfig.currentIndex = 2;
+
+          FileSaver.saveAs(data.data,'Registro-Donador '+'('+fecha_reporte+')');
+          reportWorker.terminate();
+
+          this.stepperConfig.steps[2].status = 3;
+          this.isLoadingPDF = false;
+          this.showMyStepper = false;
+      });
+
+      reportWorker.onerror().subscribe(
+        (data) => {
+          this.stepperConfig.steps[this.stepperConfig.currentIndex].status = 0;
+          this.stepperConfig.steps[this.stepperConfig.currentIndex].errorMessage = data.message;
+          this.isLoadingPDF = false;
+          reportWorker.terminate();
+        }
+      );
+      
+      let config = {
+        title: "Registro de Donación",
+        showSigns: this.reportIncludeSigns, 
+      };
+      reportWorker.postMessage({data:{items: obj, config:config, fecha_actual: this.fechaActual},reporte:'/registro-donante'});
+      this.isLoading = false;
   }
 
 }

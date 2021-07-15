@@ -50,7 +50,7 @@ class DonadoresController extends Controller
             $lista_donadores = $lista_donadores->get();
         }
 
-        return response()->json(['paginado'=>$lista_donadores], HttpResponse::HTTP_OK);
+        return response()->json(['data'=>$lista_donadores], HttpResponse::HTTP_OK);
     }
 
     /**
