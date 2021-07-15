@@ -6,6 +6,7 @@ import { PublicService } from '../public.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SharedService } from '../../shared/shared.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { formatDate } from '@angular/common';
 
 import { ReportWorker } from '../../web-workers/report-worker';
 import * as FileSaver from 'file-saver';
@@ -61,7 +62,7 @@ export class RegistroDonadorComponent implements OnInit {
     //   secondCtrl: ['', Validators.required]
     // });
 
-    this.fechaActual = new Date();
+    this.fechaActual = formatDate(new Date(), 'yyyy-MM-dd', 'en');
 
     this.donadoresForm = this.fb.group ({
 
@@ -159,22 +160,17 @@ export class RegistroDonadorComponent implements OnInit {
     }
   }
 
-  CalcularEdad() {
 
-    if (this.donadoresForm.get('fecha_nacimiento').value) {
-      
-        var timeDiff = Math.abs(Date.now() - this.donadoresForm.get('fecha_nacimiento').value);
-        var edad =  Math.ceil((timeDiff / (1000 * 3600 * 24)) / 365);
-
-        console.log("edda", edad);
-
-        this.donadoresForm.get('edad').patchValue(edad);        
-
-    } else {
-        this.donadoresForm.get('edad').patchValue('');
-    }
-
-  }
+  calcularEdad() {
+    var today = new Date();
+    var nacimiento = new Date(this.donadoresForm.get('fecha_nacimiento').value);
+    //Restamos los años
+    var años = today.getFullYear() - nacimiento.getFullYear();
+    // Si no ha llegado su cumpleaños le restamos el año por cumplir
+    if ( nacimiento.getMonth() > (today.getMonth()) || nacimiento.getDay() > this.fechaActual.getDay())
+        años--;
+    this.donadoresForm.get('edad').patchValue(años);
+}
 
   soloNumeros(event): boolean {
 

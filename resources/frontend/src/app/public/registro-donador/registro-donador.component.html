@@ -89,7 +89,19 @@
                 </div>
 
                 <div fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap.gt-sm="10px">
+
                     <mat-form-field  appearance="fill" fxFlex>
+
+                        <mat-label>Fecha de Nacimiento: </mat-label>
+
+                        <input matInput (change)="calcularEdad()" mascaraFecha formControlName="fecha_nacimiento" placeholder="Año/Mes/Día" required>
+
+                        <mat-error *ngIf="donadoresForm.get('fecha_nacimiento').hasError('isValidDate')">La fecha no es valida</mat-error>
+                        <mat-error *ngIf="donadoresForm.get('fecha_nacimiento').hasError('required')">Este campo es requerido</mat-error>
+
+                    </mat-form-field>
+
+                    <!-- <mat-form-field  appearance="fill" fxFlex>
 
                         <mat-label>Fecha de Nacimiento: </mat-label>
                         <input matInput (dateChange)="CalcularEdad()" [matDatepicker]="picker2" formControlName="fecha_nacimiento" placeholder="Fecha de Nacimiento" readonly required>
@@ -100,7 +112,7 @@
                             <span *ngIf="donadoresForm.get('fecha_nacimiento').errors.required">La Fecha de Nacimiento es obligatoria</span>
                         </mat-error>
 
-                    </mat-form-field>
+                    </mat-form-field> -->
 
                     <mat-form-field  appearance="fill" fxFlex>
                         <mat-label>Edad: </mat-label>
@@ -234,7 +246,8 @@
                     <button mat-button>Cancelar</button>
                 </div>
                 <div fxFlex="none">
-                    <button mat-raised-button color="primary" (click)="guardarDonante()" [disabled]="!donadoresForm.valid || isLoading">Guardar</button>
+                    <button mat-raised-button color="primary" (click)="registroDonante(null,null)" [disabled]="isLoading">Guardar</button>
+                    <!-- !donadoresForm.valid ||  -->
                 </div>
             </section>
             
