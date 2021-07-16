@@ -9,7 +9,7 @@ export class ReporteRegistroDonante{
         console.log(reportData);
         let contadorLineasHorizontalesV = 0;
         let fecha_hoy =  Date.now();
-        //let donante = reportData.items;
+        let donante = reportData.items;
         let datos = {
           pageOrientation: 'portrait',
           pageSize: 'LETTER',
@@ -124,15 +124,15 @@ export class ReporteRegistroDonante{
 
 
         datos.content.push({
-          //layout: 'noBorders',
+          layout: 'noBorders',
           table: {
            widths: [ 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70 ],
            margin: [0,0,0,0],
             body: [
               [
-                { image: IMG[4].CETRA, width: 80, style: "texto_centro", colSpan:2},{},
-                { image: LOGOS[0].LOGO_FEDERAL, width: 80, style:'texto_centro',colSpan:2},{},
-                { image: LOGOS[1].LOGO_ESTATAL, width: 80, style: "texto_centro", colSpan:3},{},{},
+                //{ image: LOGOS[0].LOGO_FEDERAL, width: 80, style: "img_firmas", colSpan:2},{},
+                { image: IMG[4].CETRA, width: 250, style:'img_firmas',colSpan:4},{},{},{},
+                { image: IMG[5].GOBIERNO_MEXICO, width: 80, style: "texto_centro", colSpan:3},{},{},
                 // { text: "", colSpan:4},{},{},{},
                 // { image: IMG[0].NOMBRE_FIRMA, width: 300, height: 60 },
                 // { text: "", colSpan:4},{},{},{},
@@ -140,18 +140,18 @@ export class ReporteRegistroDonante{
               [
                 {},{},{},{},
                 // { qr: 'http://donadores.saludchiapas.gob.mx/#/qr-donante/'+donante.id, fit: '85', style: "texto_centro", colSpan:4},{},{},{},
-                { text: "A mi familia: Es mi voluntad que mi fallecimiento y con la esperanza De ayudar a salvar vidas, sean donados mis órganos y tejidos con fines de trasplante. Cuando esto suceda, Apoyen mi decisión y ayuden a cumplir mi voluntad.", style: "texto_anotacion", colSpan:3},{},{},
+                { text: "A mi familia: Es mi voluntad que mi fallecimiento y con la esperanza De ayudar a salvar vidas, sean donados mis órganos y tejidos con fines de trasplante. Cuando esto suceda, Apoyen mi decisión y ayuden a cumplir mi voluntad.", style: "texto_centro", colSpan:3},{},{},
 
               ],
               [            
                 { text: "Testigos: \n\n Nombre y Firma: \n\n____________________________________ \n\n Nombre y Firma: \n\n____________________________________", style: "firma_testigos", colSpan:2},{},
-                { qr: 'http://donadores.saludchiapas.gob.mx/#/qr-donante/', fit: '85', style: "firma_testigos", colSpan:2},{},
-                // { text: "\n\nDonador: \n\n"+ donante.nombre +" "+donante.apellido_paterno+" "+donante.apellido_materno, style: "texto_centro", colSpan:3},{},{},
-                { text: "\n\nDonador: \n\n"+ 'Javier Alejandro Gosain Díaz', style: "texto_centro", colSpan:3},{},{},
+                { qr: 'http://donadores.saludchiapas.gob.mx/#/qr-donante/'+donante.id, fit: '85', style: "firma_testigos", colSpan:2},{},
+                { text: "\n\nDonador: \n\n"+ donante.nombre +" "+donante.apellido_paterno+" "+donante.apellido_materno, style: "texto_centro", colSpan:3},{},{},
+                //{ text: "\n\nDonador: \n\n"+ 'Javier Alejandro Gosain Díaz', style: "texto_centro", colSpan:3},{},{},
               ],
               [              
-                { image: IMG[3].DIRECCION, width: 300, height: 70, style: "img_firmas", colSpan:4},{},{},{},
-                { image: IMG[0].NOMBRE_FIRMA, width: 230, height: 55, style: "img_firmas", colSpan:3},{},{},
+                { image: IMG[3].DIRECCION, width: 250, height: 60, style: "img_firmas", colSpan:4},{},{},{},
+                { image: IMG[0].NOMBRE_FIRMA, width: 220, height: 50, style: "img_firmas", colSpan:3},{},{},
               ],
             ]
           }

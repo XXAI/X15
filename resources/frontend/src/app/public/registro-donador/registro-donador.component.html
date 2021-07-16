@@ -35,8 +35,9 @@
                     <img style="width:35%" src="assets/icons/cetra.jpeg" alt="">
                 </div>
             </div>
+            <br>
             
-            <section fxFlex="none" fxLayout="row">
+            <!-- <section fxFlex="none" fxLayout="row">
 
                 <div fxFlex></div>
                 <mat-form-field fxFlex="60" appearance="outline" [floatLabel]="'always'">
@@ -51,14 +52,15 @@
                 </mat-form-field>
                 <div fxFlex></div>
                 
-            </section>
+            </section> -->
             
             <section fxflex="none" fxLayout="column" [formGroup]="donadoresForm">
 
                 <div fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap.gt-sm="10px">
-                    <mat-form-field  appearance="fill" fxFlex="33">
+
+                    <mat-form-field fxFlex  appearance="fill">
                         <mat-label>CURP</mat-label>
-                        <input matInput id="curp" formControlName="curp" placeholder="CURP">
+                        <input matInput #curpInput id="curp" formControlName="curp" placeholder="CURP">
                         <mat-hint align="end">{{curpInput.value.length}} / 18</mat-hint>
 
                         <mat-error *ngIf="donadoresForm.get('curp').invalid && (donadoresForm.get('curp').dirty || donadoresForm.get('curp').touched)">
@@ -66,7 +68,9 @@
                         </mat-error>
 
                     </mat-form-field>
+
                 </div>
+
                 <div fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap.gt-sm="10px">
                     
                     <mat-form-field appearance="fill" fxFlex >
@@ -242,12 +246,12 @@
             </section>
             <section fxFlex="none" fxLayout="row" fxLayoutGap="5px">
                 <div fxFlex></div>
-                <div fxFlex="none">
+                <!-- <div fxFlex="none">
                     <button mat-button>Cancelar</button>
-                </div>
+                </div> -->
                 <div fxFlex="none">
-                    <button mat-raised-button color="primary" (click)="registroDonante(null,null)" [disabled]="isLoading">Guardar</button>
-                    <!-- !donadoresForm.valid ||  -->
+                    <button mat-raised-button color="primary" (click)="guardarDonante()" [disabled]="!donadoresForm.valid || isLoading"><mat-icon>save</mat-icon> Guardar</button>
+                    <!-- (click)="registroDonante(null,null)" !donadoresForm.valid ||  -->
                 </div>
             </section>
             
