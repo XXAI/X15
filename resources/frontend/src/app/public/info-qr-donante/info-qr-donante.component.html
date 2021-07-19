@@ -10,6 +10,7 @@
   
       <mat-card fxFlex.xs="500px" fxFlex="800px">
         <mat-card-title fxLayoutAlign="center"></mat-card-title>
+
         <mat-card-content fxLayout="column" fxLayoutAlign="space-evenly stretch">
 
             <div *ngIf="dataDonante != null">
@@ -20,6 +21,24 @@
 
                 <div fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap.gt-sm="10px">
                     <h2 fxFlex><mat-icon>assignment_ind</mat-icon> ¡Donante Encontrado!</h2>
+                </div>
+
+                <div *ngIf="showReportForm || showMyStepper">
+
+                    <div class="my-stepper" *ngIf="showMyStepper" fxLayoutAlign="space-evenly center" >
+                        <ng-container *ngFor="let step of stepperConfig.steps; let i = index">
+                            <div class="my-step" [class.my-step-active]="step.status == 2" [class.my-step-done]="step.status == 3" [class.my-step-error]="step.status == 0">
+                                <mat-icon>{{step.icon}}</mat-icon>
+                                <div class="my-step-label">
+                                    {{(step.status < 2)?step.label.standBy:((step.status == 2)?step.label.active:step.label.done)}} <mat-progress-bar *ngIf="step.status == 2" mode="indeterminate"></mat-progress-bar>
+                                    <small *ngIf="step.status == 0" class="my-step-error-message">{{step.errorMessage}}</small>
+                                </div>
+                                <mat-icon *ngIf="step.status == 3">done</mat-icon>
+                                <mat-icon *ngIf="step.status == 0">error</mat-icon>
+                            </div>
+                            <div *ngIf="(i+1) < stepperConfig.steps.length" class="my-step-separator"></div>
+                        </ng-container>
+                    </div>
                 </div>
             
                 <div fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap.gt-sm="10px">
@@ -94,6 +113,10 @@
             
             
                 <mat-divider></mat-divider>
+
+                <mat-card-actions fxLayout="row" fxLayout fxLayoutAlign="center center" fxLayoutGap="10px">
+                    <a mat-raised-button color="primary" (click)="FormatoQRDonante(dataDonante, dataDonante.id)"  matTooltip="Tarjeta del Donante"><mat-icon>print</mat-icon> Reimprimir Formato</a>
+                </mat-card-actions>
             
             </div>
 
@@ -113,10 +136,7 @@
 
     
         </mat-card-content>
-    
-        <mat-card-actions fxLayout="row" fxLayout fxLayoutAlign="center center" fxLayoutGap="10px">
-          <a mat-raised-button color="primary" routerLink="/donadores"><mat-icon>search</mat-icon> Buscar Donadores</a>
-        </mat-card-actions>
+
   
       </mat-card>
     </div>

@@ -6,6 +6,12 @@
     color:#c41515;
 }
 
+.my-stepper{
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+}
+
 h1 {
     -webkit-user-select: none !important;
     -moz-user-select: none !important;

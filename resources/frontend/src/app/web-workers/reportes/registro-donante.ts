@@ -145,7 +145,7 @@ export class ReporteRegistroDonante{
               ],
               [            
                 { text: "Testigos: \n\n Nombre y Firma: \n\n____________________________________ \n\n Nombre y Firma: \n\n____________________________________", style: "firma_testigos", colSpan:2},{},
-                { qr: 'http://donadores.saludchiapas.gob.mx/#/qr-donante/'+donante.id, fit: '85', style: "firma_testigos", colSpan:2},{},
+                { qr: 'http://donadores.saludchiapas.gob.mx/#/qr-donante/'+donante.codigo, fit: '85', style: "firma_testigos", colSpan:2},{},
                 { text: "\n\nDonador: \n\n"+ donante.nombre +" "+donante.apellido_paterno+" "+donante.apellido_materno, style: "texto_centro", colSpan:3},{},{},
                 //{ text: "\n\nDonador: \n\n"+ 'Javier Alejandro Gosain Díaz', style: "texto_centro", colSpan:3},{},{},
               ],

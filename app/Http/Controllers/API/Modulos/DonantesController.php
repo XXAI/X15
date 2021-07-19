@@ -11,7 +11,9 @@ use App\Models\Donador;
 use App\Exports\DonadoresExport;
 use Maatwebsite\Excel\Facades\Excel;
 
-class DonadoresController extends Controller
+use Illuminate\Support\Str;
+
+class DonantesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -62,6 +64,7 @@ class DonadoresController extends Controller
     public function store(Request $request){
 
         $reglas = [
+            'codigo'=>'required|unique:donadores',
             'nombre' => 'required|max:255',
             'apellido_paterno' => 'nullable',
             'apellido_materno' => 'nullable',
@@ -76,6 +79,7 @@ class DonadoresController extends Controller
         ];
 
         $mensajes = [
+            'codigo.unique' => 'El Código debe ser único',
             'nombre.required' => 'El nombre es requerido.',
             'fecha_nacimiento.required'  => 'La fecha de nacimiento es requerida.',
             'curp.required' => 'La CURP es requerida.',
@@ -90,10 +94,14 @@ class DonadoresController extends Controller
 
         $inputs = $request->all();
 
+        $inputs['codigo'] = Str::random(6);
+
         $resultado = Validator::make($inputs,$reglas,$mensajes);
 
         if($resultado->passes()){
+
             $registro = Donador::create($inputs);
+            
             return response()->json(['mensaje' => 'Guardado', 'validacion'=>$resultado->passes(), 'datos'=>$registro], HttpResponse::HTTP_OK);
         }else{
             return response()->json(['mensaje' => 'Error en los datos del formulario', 'validacion'=>$resultado->passes(), 'errores'=>$resultado->errors()], HttpResponse::HTTP_OK);
@@ -139,18 +147,19 @@ class DonadoresController extends Controller
         //
     }
 
-    public function obtenerDatosDonante($id){
+    public function obtenerDatosDonante(Request $request, $codigo){
         try{
             
-            //$params = $request->all();
 
-            $donante = Donador::with('entidad_federativa', 'seguro')->where('id',$id)->first();
+            $donante = Donador::with('entidad_federativa', 'seguro')->where('codigo',$codigo)->first();
 
             if(!$donante){
                 throw new Exception("No se encontro al Donante con este Código QR", 1);
             }
             
             return response()->json(['data'=>$donante],HttpResponse::HTTP_OK);
+                
+
         }catch(\Exception $e){
             return response()->json(['error'=>['message'=>$e->getMessage(),'line'=>$e->getLine()]], HttpResponse::HTTP_CONFLICT);
         }

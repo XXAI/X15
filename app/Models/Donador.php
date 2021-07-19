@@ -12,6 +12,7 @@ class Donador extends Model
     protected $fillable = [
         
         'id',
+        'codigo',
         'nombre',
         'apellido_paterno',
         'apellido_materno',

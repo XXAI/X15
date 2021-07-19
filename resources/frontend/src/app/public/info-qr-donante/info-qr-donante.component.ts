@@ -5,6 +5,10 @@ import { PublicService } from '../public.service';
 import { SharedService } from '../../shared/shared.service';
 import { Router, ActivatedRoute  } from '@angular/router';
 
+import { ReportWorker } from '../../web-workers/report-worker';
+import * as FileSaver from 'file-saver';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+
 
 export interface FormDialogData {
   id: number;
@@ -34,20 +38,30 @@ export class InfoQrDonanteComponent implements OnInit {
   panelOpenState    = false;
 
   dataDonante: any = null;
-  persona_id:number = 0;
+  codigo:any = "";
 
   isLoading:boolean = false;
 
+  isLoadingPDF: boolean = false;
+  showMyStepper:boolean = false;
+  showReportForm:boolean = false;
+  stepperConfig:any = {};
+  reportTitle:string;
+  reportIncludeSigns:boolean = false;
+
+  selectedItemIndex: number = -1;
+  fechaActual:any = '';
+
   ngOnInit() {
+
+    console.log("ONINIIII",this.codigo);
 
     this.route.params.subscribe(params => {
       
-      this.persona_id = params['id'];
-      if(this.persona_id){
-
-        console.log("QWE",this.persona_id);
-        console.log("datos donante",this.dataDonante);
-        this.cargarDatosPaciente(this.persona_id);
+      this.codigo = params['codigo'];
+      if(this.codigo){
+        //this.registroDonante(this.dataDonante, this.codigo);
+        this.cargarDatosPaciente(this.codigo);
 
       }
 
@@ -58,7 +72,7 @@ export class InfoQrDonanteComponent implements OnInit {
   }
 
 
-  cargarDatosPaciente(id:any){
+  cargarDatosPaciente(codigo:any){
 
     let params = {};
     let query = this.sharedService.getDataFromCurrentApp('searchQuery');
@@ -69,13 +83,10 @@ export class InfoQrDonanteComponent implements OnInit {
 
     this.isLoading = true;
 
-    this.publicService.verInfoDonante(id,params).subscribe(
+    this.publicService.verInfoDonante(codigo,params).subscribe(
       response =>{
-        console.log("en el response del DIALOG",response.data);
         
         this.dataDonante = response.data;
-
-        console.log("datos donante",this.dataDonante);
 
         this.isLoading = false;
       },
@@ -83,6 +94,8 @@ export class InfoQrDonanteComponent implements OnInit {
         console.log(errorResponse);
 
         if(errorResponse.status == 409){
+
+          this.dataDonante = null;
 
           var Message = errorResponse.error.error.message;
           this.sharedService.showSnackBar(Message, 'Cerrar', 6000);
@@ -94,6 +107,88 @@ export class InfoQrDonanteComponent implements OnInit {
       }
     );
 
+  }
+
+  FormatoQRDonante(obj, index){
+
+    this.selectedItemIndex = index;
+
+      //this.showMyStepper = true;
+      this.isLoadingPDF = true;
+      this.showMyStepper = true;
+      this.showReportForm = false;
+
+      let params:any = {};
+      let countFilter = 0;
+      let fecha_reporte = new Intl.DateTimeFormat('es-ES', {year: 'numeric', month: 'numeric', day: '2-digit'}).format(new Date());
+
+      let appStoredData = this.sharedService.getArrayDataFromCurrentApp(['searchQuery','filter']);
+      
+      params.reporte = 'registro-donador';
+      if(appStoredData['searchQuery']){
+        params.query = appStoredData['searchQuery'];
+      }
+      this.stepperConfig = {
+        steps:[
+          {
+            status: 1, //1:standBy, 2:active, 3:done, 0:error
+            label: { standBy: 'Cargar Datos', active: 'Cargando Datos', done: 'Datos Cargados' },
+            icon: 'settings_remote',
+            errorMessage: '',
+          },
+          {
+            status: 1, //1:standBy, 2:active, 3:done, 0:error
+            label: { standBy: 'Generar PDF', active: 'Generando PDF', done: 'PDF Generado' },
+            icon: 'settings_applications',
+            errorMessage: '',
+          },
+          {
+            status: 1, //1:standBy, 2:active, 3:done, 0:error
+            label: { standBy: 'Descargar Archivo', active: 'Descargando Archivo', done: 'Archivo Descargado' },
+            icon: 'save_alt',
+            errorMessage: '',
+          },
+        ],
+        currentIndex: 0
+      }
+
+
+      this.stepperConfig.steps[0].status = 2;
+
+      this.stepperConfig.steps[0].status = 3;
+      this.stepperConfig.steps[1].status = 2;
+      this.stepperConfig.currentIndex = 1;
+
+      const reportWorker = new ReportWorker();
+      reportWorker.onmessage().subscribe(
+        data => {
+          this.stepperConfig.steps[1].status = 3;
+          this.stepperConfig.steps[2].status = 2;
+          this.stepperConfig.currentIndex = 2;
+
+          FileSaver.saveAs(data.data,'Registro-Donador '+'('+fecha_reporte+')');
+          reportWorker.terminate();
+
+          this.stepperConfig.steps[2].status = 3;
+          this.isLoadingPDF = false;
+          this.showMyStepper = false;
+      });
+
+      reportWorker.onerror().subscribe(
+        (data) => {
+          this.stepperConfig.steps[this.stepperConfig.currentIndex].status = 0;
+          this.stepperConfig.steps[this.stepperConfig.currentIndex].errorMessage = data.message;
+          this.isLoadingPDF = false;
+          reportWorker.terminate();
+        }
+      );
+      
+      let config = {
+        title: "Registro de Donación",
+        showSigns: this.reportIncludeSigns, 
+      };
+      reportWorker.postMessage({data:{items: obj, config:config, fecha_actual: this.fechaActual},reporte:'/registro-donante'});
+      this.isLoading = false;
   }
 
 

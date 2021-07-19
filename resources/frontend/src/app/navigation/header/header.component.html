@@ -81,4 +81,9 @@
         </button>
       </mat-menu>
     </ng-template>
+
+    <ng-template [ngIf]="!isAuthenticated">
+      <a routerLink="/login"><mat-icon>account_circle</mat-icon></a>
+    </ng-template>
+    
   </mat-toolbar>
