@@ -93,9 +93,10 @@ export class FormComponent implements OnInit {
 
     let callRolesCatalog = this.usersService.getAllRoles();
     let callPermissionsCatalog = this.usersService.getAllPermissions();
-    let callDireccionesCatalog = this.usersService.getAllDirecciones();
+    //let callDireccionesCatalog = this.usersService.getAllDirecciones();
+    //let httpCalls = [callRolesCatalog, callPermissionsCatalog, callDireccionesCatalog];
 
-    let httpCalls = [callRolesCatalog, callPermissionsCatalog, callDireccionesCatalog];
+    let httpCalls = [callRolesCatalog, callPermissionsCatalog];
 
     this.route.paramMap.subscribe(params => {
       if(params.get('id')){
@@ -141,8 +142,8 @@ export class FormComponent implements OnInit {
           //Ends: Permissions
 
           //Starts: Roles
-          this.catalogDirecciones = results[2].data;
-          this.listOfDirecciones$ = of(this.catalogDirecciones);
+          //this.catalogDirecciones = results[2].data;
+          //this.listOfDirecciones$ = of(this.catalogDirecciones);
           this.filteredDirecciones$ = combineLatest(this.listOfDirecciones$,this.filterInputDirecciones$).pipe(
             map(
               ([direcciones,filterString]) => direcciones.filter(
