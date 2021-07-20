@@ -112,31 +112,31 @@ class UserController extends Controller
                 if(!$usuario->is_superuser){
                     $roles = $parametros['roles'];
                     $permisos = $parametros['permissions'];
-                    $direcciones_proyectos = $parametros['direcciones'];
-                    $direcciones = [];
-                    $proyectos = [];
+                    //$direcciones_proyectos = $parametros['direcciones'];
+                    //$direcciones = [];
+                    //$proyectos = [];
                 }else{
                     $roles = [];
                     $permisos = [];
-                    $direcciones_proyectos = [];
-                    $direcciones = [];
-                    $proyectos = [];
+                    //$direcciones_proyectos = [];
+                    //$direcciones = [];
+                    //$proyectos = [];
                 }
 
-                if(count($direcciones_proyectos)){
-                    foreach ($direcciones_proyectos as $direccion_id => $datos) {
-                        if(!$datos['todos']){
-                            foreach ($datos['proyectos'] as $proyecto) {
-                                $proyectos[$proyecto['id']] = ['direccion_id'=>$direccion_id];
-                            }
-                        }else{
-                            $direcciones[$direccion_id] = ['todos_proyectos'=>true];
-                        }
-                    }
-                }
+                // if(count($direcciones_proyectos)){
+                //     foreach ($direcciones_proyectos as $direccion_id => $datos) {
+                //         if(!$datos['todos']){
+                //             foreach ($datos['proyectos'] as $proyecto) {
+                //                 $proyectos[$proyecto['id']] = ['direccion_id'=>$direccion_id];
+                //             }
+                //         }else{
+                //             $direcciones[$direccion_id] = ['todos_proyectos'=>true];
+                //         }
+                //     }
+                // }
                 
-                $usuario->direcciones()->sync($direcciones);
-                $usuario->proyectos()->sync($proyectos);
+                //$usuario->direcciones()->sync($direcciones);
+                //$usuario->proyectos()->sync($proyectos);
                 $usuario->roles()->sync($roles);
                 $usuario->permissions()->sync($permisos);
 
@@ -208,31 +208,31 @@ class UserController extends Controller
                 if(!$usuario->is_superuser){
                     $roles = $parametros['roles'];
                     $permisos = $parametros['permissions'];
-                    $direcciones_proyectos = $parametros['direcciones'];
-                    $direcciones = [];
-                    $proyectos = [];
+                    //$direcciones_proyectos = $parametros['direcciones'];
+                    //$direcciones = [];
+                    //$proyectos = [];
                 }else{
                     $roles = [];
                     $permisos = [];
-                    $direcciones_proyectos = [];
-                    $direcciones = [];
-                    $proyectos = [];
+                    //$direcciones_proyectos = [];
+                    //$direcciones = [];
+                    //$proyectos = [];
                 }
 
-                if(count($direcciones_proyectos)){
-                    foreach ($direcciones_proyectos as $direccion_id => $datos) {
-                        if(!$datos['todos']){
-                            foreach ($datos['proyectos'] as $proyecto) {
-                                $proyectos[$proyecto['id']] = ['direccion_id'=>$direccion_id];
-                            }
-                        }else{
-                            $direcciones[$direccion_id] = ['todos_proyectos'=>true];
-                        }
-                    }
-                }
+                // if(count($direcciones_proyectos)){
+                //     foreach ($direcciones_proyectos as $direccion_id => $datos) {
+                //         if(!$datos['todos']){
+                //             foreach ($datos['proyectos'] as $proyecto) {
+                //                 $proyectos[$proyecto['id']] = ['direccion_id'=>$direccion_id];
+                //             }
+                //         }else{
+                //             $direcciones[$direccion_id] = ['todos_proyectos'=>true];
+                //         }
+                //     }
+                // }
 
-                $usuario->direcciones()->sync($direcciones);
-                $usuario->proyectos()->sync($proyectos);
+                //$usuario->direcciones()->sync($direcciones);
+                //$usuario->proyectos()->sync($proyectos);
                 $usuario->roles()->sync($roles);
                 $usuario->permissions()->sync($permisos);
 
