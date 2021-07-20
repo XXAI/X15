@@ -89,21 +89,9 @@ export class ListaDonadoresComponent implements OnInit {
 
   filterForm = this.fb.group({
 
-    'municipio_id'        : [undefined],
-    'municipio'           : [undefined],
-    'localidad_id'        : [undefined],
-    'localidad'           : [undefined],
-    'fecha_inicio'        : [undefined],
-    'fecha_fin'           : [undefined],
-    'edad'                : [undefined],
-    'sexo'                : [undefined],
-    'atencion'            : [undefined],
-    'nacionalidad'        : [undefined],
-    'identidad'           : [undefined],
-    'especialidad'        : [undefined],
-    'especialidad_id'     : [undefined],
-    'servicio_id'         : [undefined],
-    'ambulatorios'        : [undefined]
+    'seguro_id'               : [undefined],
+    'entidad_federativa_id'   : [undefined],
+    'edad'                    : [undefined],
 
   });
 
@@ -210,9 +198,8 @@ export class ListaDonadoresComponent implements OnInit {
 
     this.isLoading = true;
     let carga_catalogos = [
-      {nombre:'municipios',orden:'nombre'},
-      {nombre:'paises',orden:'nombre'},
-      {nombre:'especialidades',orden:'nombre'}
+      {nombre:'seguro',orden:'descripcion'},
+      {nombre:'estados',orden:'nombre'},
     ];
 
     this.publicService.obtenerCatalogos(carga_catalogos).subscribe(
@@ -220,10 +207,8 @@ export class ListaDonadoresComponent implements OnInit {
 
         this.catalogos = response.data;
 
-        this.filteredCatalogs['municipios']           = this.filterForm.controls['municipio_id'].valueChanges.pipe(startWith(''),map(value => this._filter(value,'municipios','nombre')));
-        this.filteredCatalogs['localidades']          = this.filterForm.controls['localidad_id'].valueChanges.pipe(startWith(''),map(value => this._filter(value,'localidades','nombre')));
-        this.filteredCatalogs['especialidades']       = this.filterForm.controls['especialidad_id'].valueChanges.pipe(startWith(''),map(value => this._filter(value,'especialidades','nombre')));
-        this.filteredCatalogs['servicios']            = this.filterForm.controls['servicio_id'].valueChanges.pipe(startWith(''),map(value => this._filter(value,'servicios','nombre')));
+        this.filteredCatalogs['seguro_id']                      = this.filterForm.controls['seguro_id'].valueChanges.pipe(startWith(''),map(value => this._filter(value,'seguros','descripcion')));
+        this.filteredCatalogs['entidad_federativa_id']          = this.filterForm.controls['entidad_federativa_id'].valueChanges.pipe(startWith(''),map(value => this._filter(value,'entidad_federativa','nombre')));
 
 
       },

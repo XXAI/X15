@@ -231,6 +231,7 @@ export class RegistroDonadorComponent implements OnInit {
 
           this.sharedService.showSnackBar(Message, 'Cerrar', 3000);
           this.registroDonante(response.datos, response.datos.codigo);
+          this.donadoresForm.reset();
           this.router.navigate(['/registro']);
       },
         errorResponse => {

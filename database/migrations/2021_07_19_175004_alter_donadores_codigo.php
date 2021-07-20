@@ -16,6 +16,7 @@ class AlterDonadoresCodigo extends Migration
         Schema::table('donadores', function (Blueprint $table) {
 
             $table->string('codigo',6)->index()->after('id');
+            $table->integer('edad')->index()->after('fecha_nacimiento');
 
         });
     }
@@ -30,6 +31,7 @@ class AlterDonadoresCodigo extends Migration
         Schema::table('donadores', function (Blueprint $table) {
             
             $table->dropColumn('codigo');
+            $table->dropColumn('edad');
             
         });
     }

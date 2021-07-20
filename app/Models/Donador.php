@@ -17,6 +17,7 @@ class Donador extends Model
         'apellido_paterno',
         'apellido_materno',
         'fecha_nacimiento',
+        'edad',
         'curp',
         'sexo',
         'seguro_id',

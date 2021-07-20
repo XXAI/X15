@@ -20,7 +20,7 @@ class BusquedaCatalogosController extends Controller
             $listado_catalogos = [
                 
                 'estados'                     => EntidadFederativa::getModel(),
-                'seguros'                     => Seguro::getModel(),       
+                'seguros'                     => Seguro::getModel(),
 
             ];
 
