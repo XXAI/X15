@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\Modulos;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Carbon\carbon;
 use \Validator, Exception;
@@ -24,15 +25,15 @@ class DonantesController extends Controller
     {
         $parametros = $request->all();
 
-        $lista_donadores = Donador::select('donadores.*','entidades_federativas.nombre as estado')
+        $lista_donadores = Donador::select('donadores.*','entidades_federativas.nombre as estado')->with('entidad_federativa')
                             ->leftJoin('entidades_federativas','entidades_federativas.id','=','donadores.entidad_federativa_id');
 
         if(isset($parametros['tipo_sexo']) && $parametros['tipo_sexo']){
             $lista_donadores = $lista_donadores->where('sexo',$parametros['tipo_sexo']);
         }
 
-        if(isset($parametros['buscar']) && $parametros['buscar']){
-            $query_busqueda = $parametros['buscar'];
+        if(isset($parametros['query']) && $parametros['query']){
+            $query_busqueda = $parametros['query'];
             $lista_donadores = $lista_donadores->where(function($query)use($query_busqueda){
                 $query->where('donadores.nombre','like','%'.$query_busqueda.'%')
                         ->orWhere('apellido_paterno','like','%'.$query_busqueda.'%')
@@ -41,6 +42,50 @@ class DonantesController extends Controller
                         ->orWhere('codigo_postal','like','%'.$query_busqueda.'%')
                         ->orWhere('curp','like','%'.$query_busqueda.'%');
             });
+        }
+
+        if(isset($parametros['active_filter']) && $parametros['active_filter']){
+
+
+            if(isset($parametros['query']) && $parametros['query']){
+                $query_busqueda = $parametros['query'];
+                $lista_donadores = $lista_donadores->where(function($query)use($query_busqueda){
+                    $query->where('donadores.nombre','like','%'.$query_busqueda.'%')
+                            ->orWhere('apellido_paterno','like','%'.$query_busqueda.'%')
+                            ->orWhere('apellido_materno','like','%'.$query_busqueda.'%')
+                            ->orWhere('ciudad','like','%'.$query_busqueda.'%')
+                            ->orWhere('codigo_postal','like','%'.$query_busqueda.'%')
+                            ->orWhere('curp','like','%'.$query_busqueda.'%');
+                });
+            }
+
+            if(isset($parametros['edad']) && $parametros['edad']){
+
+                $lista_donadores = $lista_donadores->where('edad',$parametros['edad'])
+                                       ->orWhere('edad','LIKE','%'.$parametros['edad'].'%');
+
+            }
+
+            if(isset($parametros['fecha_inicio'], $parametros['fecha_fin'])){
+                
+                $lista_donadores = $lista_donadores->whereBetween(DB::raw('DATE(donadores.created_at)'), [$parametros['fecha_inicio'], $parametros['fecha_fin']]);
+                                       
+
+            }
+
+            if(isset($parametros['seguro_id']) && $parametros['seguro_id']){
+
+                $lista_donadores = $lista_donadores->where('seguro_id',$parametros['seguro_id']);
+
+            }
+
+            if(isset($parametros['entidad_federativa_id']) && $parametros['entidad_federativa_id']){
+
+                $lista_donadores = $lista_donadores->where('entidad_federativa_id',$parametros['entidad_federativa_id']);
+
+            }
+
+
         }
 
         if(isset($parametros['page'])){

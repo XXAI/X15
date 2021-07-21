@@ -22,6 +22,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 
 import { AuthService } from '../../auth/auth.service';
+import { formatDate } from '@angular/common';
 
 
 
@@ -74,7 +75,7 @@ export class ListaDonadoresComponent implements OnInit {
     '4':'swap_horizontal_circle' //en transferencia
   };
 
-  displayedColumns: string[] = ['nombre', 'fecha_nacimiento', 'curp', 'qr'];
+  displayedColumns: string[] = ['nombre', 'edad', 'fecha_nacimiento', 'curp', 'qr'];
   dataSource: any = [];
   dataSourceFilters: any = [];
 
@@ -89,9 +90,13 @@ export class ListaDonadoresComponent implements OnInit {
 
   filterForm = this.fb.group({
 
+    'seguro'                  : [undefined],
     'seguro_id'               : [undefined],
+    'entidad_federativa'      : [undefined],
     'entidad_federativa_id'   : [undefined],
     'edad'                    : [undefined],
+    'fecha_inicio'            : [undefined],
+    'fecha_fin'               : [undefined],
 
   });
 
@@ -150,6 +155,10 @@ export class ListaDonadoresComponent implements OnInit {
       this.filterForm.patchValue(appStoredData['filter']);
     }
 
+    this.fechaActual = new Date();
+
+    this.maxDate = this.fechaActual;
+
     this.loadPacientesData(event);
     this.loadFilterCatalogs();
     //console.log(this.filteredDiagnosticos);
@@ -198,7 +207,7 @@ export class ListaDonadoresComponent implements OnInit {
 
     this.isLoading = true;
     let carga_catalogos = [
-      {nombre:'seguro',orden:'descripcion'},
+      {nombre:'seguros',orden:'descripcion'},
       {nombre:'estados',orden:'nombre'},
     ];
 
@@ -207,8 +216,10 @@ export class ListaDonadoresComponent implements OnInit {
 
         this.catalogos = response.data;
 
-        this.filteredCatalogs['seguro_id']                      = this.filterForm.controls['seguro_id'].valueChanges.pipe(startWith(''),map(value => this._filter(value,'seguros','descripcion')));
-        this.filteredCatalogs['entidad_federativa_id']          = this.filterForm.controls['entidad_federativa_id'].valueChanges.pipe(startWith(''),map(value => this._filter(value,'entidad_federativa','nombre')));
+        console.log(this.catalogos);
+
+        this.filteredCatalogs['seguros'] = this.filterForm.controls['seguro_id'].valueChanges.pipe(startWith(''),map(value => this._filter(value,'seguros','descripcion')));
+        this.filteredCatalogs['estados'] = this.filterForm.controls['entidad_federativa_id'].valueChanges.pipe(startWith(''),map(value => this._filter(value,'estados','nombre')));
 
 
       },
@@ -246,7 +257,7 @@ export class ListaDonadoresComponent implements OnInit {
           tooltip: i.toUpperCase() + ': ',
           active: true
         };
-        if(i == 'municipio_id'){
+        if(i == 'entidad_federativa_id'){
           item.tag = data[i].nombre;
           item.tooltip += data[i].id;
           if(item.tooltip.length > 20){
@@ -256,71 +267,23 @@ export class ListaDonadoresComponent implements OnInit {
             item.tag = data[i].nombre;
             item.tooltip = "Clave: "+data[i].clave+', '+data[i].nombre.toUpperCase();
           }
-        }else if(i == 'localidad_id'){
-          item.tag = data[i].nombre;
-          item.tooltip = "Clave: "+data[i].clave+', '+data[i].nombre.toUpperCase();
-        }else if(i == 'municipios'){
+        }else if(i == 'seguro_id'){
           item.tag = data[i].descripcion;
-        }
-        else if(i == 'especialidad_id'){
-          item.tag = data[i].nombre;
-          item.tooltip = "Especialidad: "+data[i].nombre.toUpperCase();
-        }
-        else if(i == 'servicio_id'){
-          item.tag = data[i].nombre;
-          item.tooltip = "Servicio: "+data[i].nombre.toUpperCase();
-        }
-        else if(i == 'sexo'){
-          if(this.filterForm.value.sexo == 'Masculino'){
-            item.tag = 'MASCULINO';
-          }else{
-            item.tag = 'FEMENINO';
-          }
+          item.tooltip = "Afiliación: "+data[i].descripcion.toUpperCase();
         }
         else if(i == 'edad'){
           item.tag = this.filterForm.value.edad +' '+"AÑOS";
         }
-        else if(i == 'identidad'){
-          if(this.filterForm.value.identidad == 1){
-            item.tag = 'DESCONOCIDA';
-           
-          }else{
-            item.tag = 'CONOCIDA';
-          }
+        else if (i == 'fecha_inicio') {
+          var desde = formatDate(new Date(this.filterForm.value.fecha_inicio), 'yyyy-MM-dd', 'en'); 
+          item.tag = desde;
+          item.tooltip = "Fecha de Captura (Desde): " + desde;
         }
-        else if(i == 'nacionalidad'){
-          if(this.filterForm.value.nacionalidad == 1){
-            item.tag = 'EXTRANJERA';
-          }else{
-            item.tag = 'MEXICANA';
-          }
+        else if (i == 'fecha_fin') {
+          var hasta = formatDate(new Date(this.filterForm.value.fecha_fin), 'yyyy-MM-dd', 'en');
+          item.tag = hasta;
+          item.tooltip = "Fecha de Captura (Hasta): " + hasta;
         }
-        else if(i == 'atencion'){
-          if(this.filterForm.value.atencion == 1){
-            item.tag = 'EN ATENCIÓN HOSPITALARIA';
-          }else{
-            item.tag = 'REGISTRADOS';
-          }
-        }
-        else if(i == 'ambulatorios'){
-          if(this.filterForm.value.ambulatorios == 1){
-            item.tag = 'PACIENTES AMBULATORIOS';
-          }else if(this.filterForm.value.ambulatorios == 0){
-            item.tag = 'PACIENTES EN SERVICIOS';
-          }else{
-            item.tag = 'PACIENTES SIN SEGUIMIENTO ASIGNADO';
-          }
-        }
-        // else if (i == 'fecha_inicio') {
-        //   var desde = moment(this.filterForm.value.fecha_inicio).format('DD/MM/YYYY'); 
-        //   item.tag = desde;
-        //   item.tooltip = "Fecha de Ingreso (Desde): " + desde;
-        // }
-        // else if (i == 'fecha_fin') {
-        //   var hasta = moment(this.filterForm.value.fecha_fin).format('DD/MM/YYYY')
-        //   item.tag = hasta;
-        //   item.tooltip = "Fecha de Ingreso (Hasta): " + hasta;
-        // }
         this.filterChips.push(item);
       }
     }
@@ -354,46 +317,20 @@ export class ListaDonadoresComponent implements OnInit {
 
       if(filterFormValues[i]){
 
-        if(i == 'municipio_id'){
+        if(i == 'entidad_federativa_id'){
           params[i] = filterFormValues[i].id;
-        }else if(i == 'localidad_id'){
+        }else if(i == 'seguro_id'){
           params[i] = filterFormValues[i].id;
-        }else if(i == 'municipios'){
-          params[i] = filterFormValues[i].id;
-        }else if(i == 'sexo'){
-          params[i] = this.filterForm.value.sexo;
         }else if(i == 'edad'){
           params[i] = this.filterForm.value.edad;
-        }else if(i == 'identidad'){
-          var identidad;
-          identidad = this.filterForm.value.identidad;
-          params[i] = identidad;
-        }else if(i == 'nacionalidad'){
-          var nacionalidad;
-          nacionalidad = this.filterForm.value.nacionalidad;
-          params[i] = nacionalidad;
-        }else if(i == 'atencion'){
-          var atencion;
-          atencion = this.filterForm.value.atencion;
-          params[i] = atencion;
-        }else if(i == 'ambulatorios'){
-          var ambulatorios;
-          ambulatorios = this.filterForm.value.ambulatorios;
-          params[i] = ambulatorios;
         }
-        // else if (i == 'fecha_inicio') {
-        //   var desde = moment(this.filterForm.value.fecha_inicio).format('YYYY-MM-DD');
-        //   params[i] = desde;
-        // }
-        // else if (i == 'fecha_fin') {
-        //   var hasta = moment(this.filterForm.value.fecha_fin).format('YYYY-MM-DD');
-        //   params[i] = hasta;
-        // }
-        else if(i == 'especialidad_id'){
-          params[i] = filterFormValues[i].id;
+        else if (i == 'fecha_inicio') {
+          var desde = formatDate(new Date(this.filterForm.value.fecha_inicio), 'yyyy-MM-dd', 'en');
+          params[i] = desde;
         }
-        else if(i == 'servicio_id'){
-          params[i] = filterFormValues[i].id;
+        else if (i == 'fecha_fin') {
+          var hasta = formatDate(new Date(this.filterForm.value.fecha_fin), 'yyyy-MM-dd', 'en');
+          params[i] = hasta;
         }
         countFilter++;
 
@@ -455,70 +392,6 @@ export class ListaDonadoresComponent implements OnInit {
 
   }
 
-  checkAutocompleteValue(field_name) {
-    setTimeout(() => {
-      if (typeof(this.filterForm.get(field_name).value) != 'object') {
-        this.filterForm.get(field_name).reset();
-        if(field_name != 'localidad_id'){
-          this.catalogos['localidades'] = false;
-          this.actualizarValidacionesCatalogos('localidades');  
-        }
-      } 
-    }, 300);
-  }
-
-  actualizarValidacionesCatalogos(catalogo){
-    switch (catalogo) {
-      case 'municipios':
-        if(this.catalogos['municipios']){
-          this.filterForm.controls['municipio'].setValidators(null);
-          this.filterForm.controls['municipio_id'].setValidators(null);
-        }else{
-          this.filterForm.controls['municipio'].setValidators(null);
-          this.filterForm.controls['municipio_id'].setValidators(null);
-        }
-        this.filterForm.controls['municipio'].updateValueAndValidity();
-        this.filterForm.controls['municipio_id'].updateValueAndValidity();
-        break;
-      case 'localidades':
-        if(this.catalogos['localidades']){
-          this.filterForm.controls['localidad'].setValidators(null);
-          this.filterForm.controls['localidad_id'].setValidators(null);
-        }else{
-          this.filterForm.controls['localidad'].setValidators(null);
-          this.filterForm.controls['localidad_id'].setValidators(null);
-        }
-        this.filterForm.controls['localidad_id'].setValidators(null);
-
-        this.filterForm.controls['localidad'].updateValueAndValidity();
-        this.filterForm.controls['localidad_id'].updateValueAndValidity();
-        break;
-      default:
-        break;
-    }
-  }
-
-  cargarLocalidades(event){
-
-    let municipio = event.option.value;
-
-    let carga_catalogos = [
-      {nombre:'localidades',orden:'nombre',filtro_id:{campo:'municipios_id',valor:municipio.id}},
-    ];
-    this.catalogos['localidades'] = false;
-    this.filterForm.get('localidad_id').reset();
-    this.filterForm.get('localidad').reset();
-
-    this.publicService.obtenerCatalogos(carga_catalogos).subscribe(
-      response => {
-        if(response.data['localidades'].length > 0){
-          this.catalogos['localidades'] = response.data['localidades'];
-        }
-        
-        this.actualizarValidacionesCatalogos('localidades');
-      }
-    );
-  }
 
   // verDonante(id: number, index: number){
   //   this.selectedItemIndex = index;
@@ -581,7 +454,7 @@ export class ListaDonadoresComponent implements OnInit {
 
   toggleReportPanel(){
     this.reportIncludeSigns = false;
-    this.reportTitle = 'Relación de Ingreso de Pacientes';
+    this.reportTitle = 'Relación de Donantes';
 
     this.stepperConfig = {
       steps:[
@@ -614,7 +487,7 @@ export class ListaDonadoresComponent implements OnInit {
     //this.showMyStepper = !this.showMyStepper;
   }
 
-  reportePacientes(){
+  reporteDonantes(){
     //this.showMyStepper = true;
     this.isLoadingPDF = true;
     this.showMyStepper = true;
@@ -623,6 +496,8 @@ export class ListaDonadoresComponent implements OnInit {
     let params:any = {};
     let countFilter = 0;
 
+    let fecha_reporte = new Intl.DateTimeFormat('es-ES', {year: 'numeric', month: 'long', day: '2-digit'}).format(new Date());
+    
     let appStoredData = this.sharedService.getArrayDataFromCurrentApp(['searchQuery','filter']);
     //console.log("onlyone",appStoredData);
 
@@ -636,32 +511,19 @@ export class ListaDonadoresComponent implements OnInit {
 
       if(appStoredData['filter'][i]){
 
-        if(i == 'municipio_id'){
+        if(i == 'entidad_federativa_id'){
           params[i] = appStoredData['filter'][i].id;
-        }else if(i == 'localidad_id'){
+        }else if(i == 'seguro_id'){
           params[i] = appStoredData['filter'][i].id;
-        }else if(i == 'especialidad_id'){
-          params[i] = appStoredData['filter'][i].id;
-        }
-        else if(i == 'sexo'){
-          params[i] = this.filterForm.value.sexo;
         }else if(i == 'edad'){
           params[i] = this.filterForm.value.edad;
-        }else if(i == 'identidad'){
-          params[i] = this.filterForm.value.identidad;
-        }else if(i == 'nacionalidad'){
-          params[i] = this.filterForm.value.nacionalidad;
-        }else if(i == 'atencion'){
-          params[i] = this.filterForm.value.atencion;
-        }else if(i == 'ambulatorios'){
-          params[i] = this.filterForm.value.ambulatorios;
-        // }else if (i == 'fecha_inicio') {
-        //   var desde = moment(this.filterForm.value.fecha_inicio).format('YYYY-MM-DD');
-        //   params[i] = desde;
-        // }else if (i == 'fecha_fin') {
-        //   var hasta = moment(this.filterForm.value.fecha_fin).format('YYYY-MM-DD');
-        //   params[i] = hasta;
-        // }
+        }else if (i == 'fecha_inicio') {
+          var desde = formatDate(new Date(this.filterForm.value.fecha_inicio), 'yyyy-MM-dd', 'en');
+          params[i] = desde;
+        }else if (i == 'fecha_fin') {
+          var hasta = formatDate(new Date(this.filterForm.value.fecha_fin), 'yyyy-MM-dd', 'en');
+          params[i] = hasta;
+        }
         
         countFilter++;
 
@@ -687,7 +549,7 @@ export class ListaDonadoresComponent implements OnInit {
             this.stepperConfig.steps[0].status = 3;
             this.stepperConfig.steps[1].status = 2;
             this.stepperConfig.currentIndex = 1;
-
+            console.log("fecha save",fecha_reporte);
             const reportWorker = new ReportWorker();
             reportWorker.onmessage().subscribe(
               data => {
@@ -696,7 +558,7 @@ export class ListaDonadoresComponent implements OnInit {
                 this.stepperConfig.currentIndex = 2;
 
                 // console.log("deitaa",data);
-                FileSaver.saveAs(data.data,'Ingreso de Pacientes'+' '+'('+this.fechaActual+')' );
+                FileSaver.saveAs(data.data,'Reporte de Donantes'+' '+'('+fecha_reporte+')' );
                 reportWorker.terminate();
 
                 this.stepperConfig.steps[2].status = 3;
@@ -719,7 +581,7 @@ export class ListaDonadoresComponent implements OnInit {
               title: this.reportTitle,
               showSigns: this.reportIncludeSigns, 
             };
-            reportWorker.postMessage({data:{items: response.data, config:config},reporte:'/ingreso-pacientes'});
+            reportWorker.postMessage({data:{items: response.data, config:config},reporte:'/reporte-donantes'});
         }
         this.isLoading = false;
       },
@@ -735,7 +597,6 @@ export class ListaDonadoresComponent implements OnInit {
         
       }
     );
-  }
   }
 
   QRDonante(obj, index){
@@ -796,7 +657,6 @@ export class ListaDonadoresComponent implements OnInit {
           this.stepperConfig.steps[1].status = 3;
           this.stepperConfig.steps[2].status = 2;
           this.stepperConfig.currentIndex = 2;
-
           FileSaver.saveAs(data.data,'Registro-Donador '+'('+fecha_reporte+')');
           reportWorker.terminate();
 
