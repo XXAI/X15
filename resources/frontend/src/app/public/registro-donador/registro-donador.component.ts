@@ -62,7 +62,10 @@ export class RegistroDonadorComponent implements OnInit {
     //   secondCtrl: ['', Validators.required]
     // });
 
-    this.fechaActual = formatDate(new Date(), 'yyyy-MM-dd', 'en');
+    this.fechaActual = new Date();
+
+    //this.fechaActual = formatDate(new Date(), 'yyyy-MM-dd', 'en');
+
 
     this.donadoresForm = this.fb.group ({
 
@@ -80,7 +83,7 @@ export class RegistroDonadorComponent implements OnInit {
       entidad_federativa_id:['7',Validators.required],
       seguro:[''],
       seguro_id:['',Validators.required],
-      seguro_otro:[''],
+      //seguro_otro:[''],
       email: ['', [Validators.required, Validators.email]],
       telefono_contacto:[''],
 
@@ -164,10 +167,11 @@ export class RegistroDonadorComponent implements OnInit {
   calcularEdad() {
     var today = new Date();
     var nacimiento = new Date(this.donadoresForm.get('fecha_nacimiento').value);
+    console.log(nacimiento);
     //Restamos los años
     var años = today.getFullYear() - nacimiento.getFullYear();
     // Si no ha llegado su cumpleaños le restamos el año por cumplir
-    if ( nacimiento.getMonth() > (today.getMonth()) || nacimiento.getDay() > this.fechaActual.getDay())
+    if ( nacimiento.getMonth() > (today.getMonth()) || nacimiento.getDay() > today.getDay())
         años--;
     this.donadoresForm.get('edad').patchValue(años);
 }
@@ -227,18 +231,35 @@ export class RegistroDonadorComponent implements OnInit {
           console.log(response);
           this.isLoading = false;
 
-          var Message = "Donante Registrado con Éxito!";
 
-          this.sharedService.showSnackBar(Message, 'Cerrar', 3000);
-          this.registroDonante(response.datos, response.datos.codigo);
-          this.donadoresForm.reset();
-          this.router.navigate(['/registro']);
-      },
-        errorResponse => {
-          console.log(errorResponse);
-          this.reponseErrorsPaciente(errorResponse);
-          this.isLoading = false;
+
+          if(response.status != 409){
+
+            var Message = "Donante Registrado con Éxito!";
+
+            this.sharedService.showSnackBar(Message, 'Cerrar', 3000);
+
+            this.registroDonante(response.datos, response.datos.codigo);
+            this.donadoresForm.reset();
+            this.router.navigate(['/registro']);
+
+          }else if(response.status == 409){
+
+            var error = response.errores.curp[0];
+
+            this.sharedService.showSnackBar(error, 'Cerrar', 3000);
+
+          }
+
+          errorResponse => {
+            console.log(errorResponse.error.errores);
+            this.reponseErrorsPaciente(errorResponse);
+            this.isLoading = false;
+          }
+          
+
       });
+
     }
 
   }

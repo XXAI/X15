@@ -131,22 +131,22 @@ export class ReporteRegistroDonante{
             body: [
               [
                 //{ image: LOGOS[0].LOGO_FEDERAL, width: 80, style: "img_firmas", colSpan:2},{},
-                { image: IMG[4].CETRA, width: 250, style:'img_firmas',colSpan:4},{},{},{},
-                { image: IMG[5].GOBIERNO_MEXICO, width: 80, style: "texto_centro", colSpan:3},{},{},
+                { image: IMG[4].CETRA, width: 200, style:'texto_centro',colSpan:4},{},{},{},
+                { image: IMG[5].GOBIERNO_MEXICO, width: 70, style: "texto_centro", colSpan:3},{},{},
                 // { text: "", colSpan:4},{},{},{},
                 // { image: IMG[0].NOMBRE_FIRMA, width: 300, height: 60 },
                 // { text: "", colSpan:4},{},{},{},
               ],
-              [
-                {},{},{},{},
-                // { qr: 'http://donadores.saludchiapas.gob.mx/#/qr-donante/'+donante.id, fit: '85', style: "texto_centro", colSpan:4},{},{},{},
-                { text: "A mi familia: Es mi voluntad que mi fallecimiento y con la esperanza De ayudar a salvar vidas, sean donados mis órganos y tejidos con fines de trasplante. Cuando esto suceda, Apoyen mi decisión y ayuden a cumplir mi voluntad.", style: "texto_centro", colSpan:3},{},{},
+              // [
+              //   {},{},{},{},
+              //   // { qr: 'http://donadores.saludchiapas.gob.mx/#/qr-donante/'+donante.id, fit: '85', style: "texto_centro", colSpan:4},{},{},{},
+              //   { text: "A mi familia: Es mi voluntad que mi fallecimiento y con la esperanza De ayudar a salvar vidas, sean donados mis órganos y tejidos con fines de trasplante. Cuando esto suceda, Apoyen mi decisión y ayuden a cumplir mi voluntad.", style: "texto_centro", colSpan:3},{},{},
 
-              ],
+              // ],
               [            
-                { text: "Testigos: \n\n Nombre y Firma: \n\n____________________________________ \n\n Nombre y Firma: \n\n____________________________________", style: "firma_testigos", colSpan:2},{},
+                { text: "Testigos: \n\n Nombre y Firma: \n\n____________________________________ \n\n Nombre y Firma: \n\n____________________________________", style: "texto_centro", colSpan:2},{},
                 { qr: 'http://donadores.saludchiapas.gob.mx/#/qr-donante/'+donante.codigo, fit: '85', style: "firma_testigos", colSpan:2},{},
-                { text: "\n\nDonador: \n\n"+ donante.nombre +" "+donante.apellido_paterno+" "+donante.apellido_materno, style: "texto_centro", colSpan:3},{},{},
+                { text: "A mi familia: Es mi voluntad que mi fallecimiento y con la esperanza De ayudar a salvar vidas, sean donados mis órganos y tejidos con fines de trasplante. Cuando esto suceda, Apoyen mi decisión y ayuden a cumplir mi voluntad.\n\nDonador: \n"+ donante.nombre+" "+donante.apellido_paterno+" "+donante.apellido_materno, style: "texto_centro", colSpan:3},{},{},
                 //{ text: "\n\nDonador: \n\n"+ 'Javier Alejandro Gosain Díaz', style: "texto_centro", colSpan:3},{},{},
               ],
               [              

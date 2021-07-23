@@ -114,7 +114,7 @@ class DonantesController extends Controller
             'apellido_paterno' => 'nullable',
             'apellido_materno' => 'nullable',
             'fecha_nacimiento' => 'required|date' ,
-            'curp' => 'required|size:18',
+            'curp' => 'required|size:18|unique:donadores',
             'sexo' => 'required',
             'codigo_postal' => 'required',
             'ciudad' => 'required',
@@ -129,6 +129,7 @@ class DonantesController extends Controller
             'fecha_nacimiento.required'  => 'La fecha de nacimiento es requerida.',
             'curp.required' => 'La CURP es requerida.',
             'curp.size' => 'La CURP debe tener :size caracteres de largo',
+            'curp.unique'   => 'La CURP ya se encuentra registrada con otro Donante.',
             'sexo.required' => 'El sexo es requerido.',
             'codigo_postal.required' => 'El codigo postal es requerido.',
             'ciudad.required' => 'La ciudad es requerida.',
@@ -149,7 +150,7 @@ class DonantesController extends Controller
             
             return response()->json(['mensaje' => 'Guardado', 'validacion'=>$resultado->passes(), 'datos'=>$registro], HttpResponse::HTTP_OK);
         }else{
-            return response()->json(['mensaje' => 'Error en los datos del formulario', 'validacion'=>$resultado->passes(), 'errores'=>$resultado->errors()], HttpResponse::HTTP_OK);
+            return response()->json(['mensaje' => 'Error en los datos del formulario', 'status' => 409, 'validacion'=>$resultado->passes(), 'errores'=>$resultado->errors()], HttpResponse::HTTP_OK);
         }
     }
 

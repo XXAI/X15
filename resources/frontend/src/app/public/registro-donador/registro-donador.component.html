@@ -98,7 +98,7 @@
 
                         <mat-label>Fecha de Nacimiento: </mat-label>
 
-                        <input matInput (change)="calcularEdad()" mascaraFecha formControlName="fecha_nacimiento" placeholder="Año/Mes/Día" required>
+                        <input type="date" matInput (change)="calcularEdad()" formControlName="fecha_nacimiento" placeholder="Año/Mes/Día" required>
 
                         <mat-error *ngIf="donadoresForm.get('fecha_nacimiento').hasError('isValidDate')">La fecha no es valida</mat-error>
                         <mat-error *ngIf="donadoresForm.get('fecha_nacimiento').hasError('required')">Este campo es requerido</mat-error>
@@ -108,7 +108,7 @@
                     <!-- <mat-form-field  appearance="fill" fxFlex>
 
                         <mat-label>Fecha de Nacimiento: </mat-label>
-                        <input matInput (dateChange)="CalcularEdad()" [matDatepicker]="picker2" formControlName="fecha_nacimiento" placeholder="Fecha de Nacimiento" readonly required>
+                        <input matInput (dateChange)="calcularEdad()" [matDatepicker]="picker2" formControlName="fecha_nacimiento" placeholder="Fecha de Nacimiento" required>
                         <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
                         <mat-datepicker #picker2></mat-datepicker>
 
@@ -126,11 +126,6 @@
                         </mat-error>
                     </mat-form-field>
 
-                </div>
-
-
-                <div fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap.gt-sm="10px">
-
                     <mat-form-field  appearance="fill" fxFlex>
                         <mat-label>Sexo</mat-label>
                         <mat-select formControlName="sexo">
@@ -142,9 +137,9 @@
                         </mat-error>
                     </mat-form-field>
 
-  
-
                 </div>
+
+
                 <div fxLayout.gt-sm="row" fxLayout="column" fxLayoutGap.gt-sm="10px">
 
                     <!-- <mat-form-field  appearance="fill" fxFlex>
@@ -237,10 +232,10 @@
                         <mat-error *ngIf="donadoresForm.get('seguro_id').hasError('required')">Este campo es obligatorio</mat-error>
                     </mat-form-field>
 
-                    <mat-form-field  appearance="fill" fxFlex>
+                    <!-- <mat-form-field  appearance="fill" fxFlex>
                         <mat-label>Otra Derechohabiencia ó Seguro:</mat-label>
                         <input matInput id="seguro_otro" formControlName="seguro_otro" placeholder="Otra Derechohabiencia ó Seguro">
-                    </mat-form-field>
+                    </mat-form-field> -->
 
                 </div>
             </section>
