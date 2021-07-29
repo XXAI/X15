@@ -103,7 +103,13 @@ export class ReporteRegistroDonante{
               {
                 bold: true,
                 alignment:"center",
-                fontSize: 8
+                fontSize: 6
+              },
+              texto_derecha:
+              {
+                bold: true,
+                alignment:"right",
+                fontSize: 6
               },
               firma_testigos:
               {
@@ -118,21 +124,27 @@ export class ReporteRegistroDonante{
               img_firmas:
               {
                 alignment:"left"
+              },
+              img_testigos:
+              {
+                alignment:"right"
               }
             }
         };
 
 
         datos.content.push({
-          layout: 'noBorders',
+          //layout: 'noBorders',
           table: {
-           widths: [ 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70, 70 ],
+           widths: [ 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60, 60 ],
            margin: [0,0,0,0],
+           headerRows: 2,
+           keepWithHeaderRows: 1,
             body: [
               [
                 //{ image: LOGOS[0].LOGO_FEDERAL, width: 80, style: "img_firmas", colSpan:2},{},
-                { image: IMG[4].CETRA, width: 200, style:'texto_centro',colSpan:4},{},{},{},
-                { image: IMG[5].GOBIERNO_MEXICO, width: 70, style: "texto_centro", colSpan:3},{},{},
+                { image: IMG[4].CETRA, width: 110, style:'img', border: [true,true,false,false], colSpan:4},{},{},{},
+                { image: IMG[5].GOBIERNO_MEXICO, width: 40, style: "texto_centro", border: [false,true,true,false], colSpan:3},{},{},
                 // { text: "", colSpan:4},{},{},{},
                 // { image: IMG[0].NOMBRE_FIRMA, width: 300, height: 60 },
                 // { text: "", colSpan:4},{},{},{},
@@ -144,14 +156,14 @@ export class ReporteRegistroDonante{
 
               // ],
               [            
-                { text: "Testigos: \n\n Nombre y Firma: \n\n____________________________________ \n\n Nombre y Firma: \n\n____________________________________", style: "texto_centro", colSpan:2},{},
-                { qr: 'http://donadores.saludchiapas.gob.mx/#/qr-donante/'+donante.codigo, fit: '85', style: "firma_testigos", colSpan:2},{},
-                { text: "A mi familia: Es mi voluntad que mi fallecimiento y con la esperanza De ayudar a salvar vidas, sean donados mis órganos y tejidos con fines de trasplante. Cuando esto suceda, Apoyen mi decisión y ayuden a cumplir mi voluntad.\n\nDonador: \n"+ donante.nombre+" "+donante.apellido_paterno+" "+donante.apellido_materno, style: "texto_centro", colSpan:3},{},{},
+                { text: "Testigos: \n\n Nombre y Firma: \n\n_________________________________ \n\n Nombre y Firma: \n\n_________________________________", style: "texto_centro", border: [true,false,false,false], colSpan:2},{},
+                { qr: 'http://donadores.saludchiapas.gob.mx/#/qr-donante/'+donante.codigo, fit: '70', style: "img_firmas",  border: [false,false,false,false], colSpan:2},{},
+                { text: "A mi familia: Es mi voluntad que mi fallecimiento y con la esperanza De ayudar a salvar vidas, sean donados mis órganos y tejidos con fines de trasplante. Cuando esto suceda, Apoyen mi decisión y ayuden a cumplir mi voluntad.\n\nDonador: \n"+ donante.nombre+" "+donante.apellido_paterno+" "+donante.apellido_materno, style: "texto_centro",  border: [false,false,true,false], colSpan:3},{},{},
                 //{ text: "\n\nDonador: \n\n"+ 'Javier Alejandro Gosain Díaz', style: "texto_centro", colSpan:3},{},{},
               ],
               [              
-                { image: IMG[3].DIRECCION, width: 250, height: 60, style: "img_firmas", colSpan:4},{},{},{},
-                { image: IMG[0].NOMBRE_FIRMA, width: 220, height: 50, style: "img_firmas", colSpan:3},{},{},
+                { image: IMG[3].DIRECCION, width: 225, height: 50, style: "img_firmas", border: [true,false,false,true], colSpan:4},{},{},{},
+                { image: IMG[0].NOMBRE_FIRMA, width: 200, height: 40, style: "img", border: [false,false,true,true], colSpan:3},{},{},
               ],
             ]
           }
