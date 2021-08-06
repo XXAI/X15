@@ -35,3 +35,10 @@
     color: #555;    
     margin-bottom:15px;  
 }
+.bg-dark {
+    background-color: #343a40!important;
+}
+
+.bg-text {
+    color: #ffffff!important;
+}
