@@ -239,9 +239,9 @@ export class RegistroDonadorComponent implements OnInit {
 
             this.sharedService.showSnackBar(Message, 'Cerrar', 3000);
 
-            this.registroDonante(response.datos, response.datos.codigo);
+            this.QRDonante(response.datos, response.datos.codigo);
             this.donadoresForm.reset();
-            this.router.navigate(['/registro']);
+            this.router.navigate(['/qr-donante/'+response.datos.codigo]);
 
           }else if(response.status == 409){
 
@@ -284,7 +284,7 @@ export class RegistroDonadorComponent implements OnInit {
     }
   }
 
-  registroDonante(obj, index){
+  QRDonante(obj, index){
 
     console.log("acaaa",obj);
 
