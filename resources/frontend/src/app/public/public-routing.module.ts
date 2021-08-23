@@ -14,8 +14,9 @@ const routes: Routes = [
   { path: 'registro/nuevo',    component: RegistroDonadorComponent, data: { hideHeader: true } },
 
 
-  { path: 'qr-donante/:codigo', component: InfoQrDonanteComponent, canActivate: [GuessGuard] },
-  { path: 'donantes', component: ListaDonadoresComponent, canActivate: [AuthGuard] },
+  { path: 'qr-donante/:codigo',   component: InfoQrDonanteComponent,    canActivate: [GuessGuard] },
+  { path: 'donantes',             component: ListaDonadoresComponent,   canActivate: [AuthGuard] },
+  { path: 'aditar-donante/:id',    component: RegistroDonadorComponent,  canActivate: [AuthGuard] },
 ];
 
 @NgModule({

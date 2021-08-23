@@ -162,7 +162,16 @@ class DonantesController extends Controller
      */
     public function show($id)
     {
-        //
+
+        $donante = Donador::select('donadores.*','entidades_federativas.nombre as estado')->with('entidad_federativa', 'seguro')
+        ->leftJoin('entidades_federativas','entidades_federativas.id','=','donadores.entidad_federativa_id')->find($id);
+
+        if(!$donante){
+            return response()->json(['No se encuentra el recurso que esta buscando.'], HttpResponse::HTTP_CONFLICT);
+            //404
+        }
+
+        return response()->json(['donante' => $donante], 200);
     }
 
     public function exportExcel(Request $request){
@@ -179,7 +188,88 @@ class DonantesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+
+        $inputs = $request->all();
+
+        try {
+
+            $reglas = [
+                'codigo'=>'required:donadores',
+                'nombre' => 'required|max:255',
+                'apellido_paterno' => 'nullable',
+                'apellido_materno' => 'nullable',
+                'fecha_nacimiento' => 'required|date' ,
+                'curp' => 'required|size:18:donadores',
+                'sexo' => 'required',
+                'codigo_postal' => 'required',
+                'ciudad' => 'required',
+                'entidad_federativa_id' => 'required',
+                'email' => 'required|email',
+                'telefono_contacto' => 'nullable',
+            ];
+    
+            $mensajes = [
+                'id.required'   => 'El ID es requerido.',
+                'id.unique'     => 'El ID debe ser único.',
+                //'codigo.unique' => 'El Código debe ser único',
+                'nombre.required' => 'El nombre es requerido.',
+                'fecha_nacimiento.required'  => 'La fecha de nacimiento es requerida.',
+                'curp.required' => 'La CURP es requerida.',
+                'curp.size' => 'La CURP debe tener :size caracteres de largo',
+                //'curp.unique'   => 'La CURP ya se encuentra registrada con otro Donante.',
+                'sexo.required' => 'El sexo es requerido.',
+                'codigo_postal.required' => 'El codigo postal es requerido.',
+                'ciudad.required' => 'La ciudad es requerida.',
+                'entidad_federativa_id.required' => 'El estado es requerido.',
+                'email.required' => 'El correo electronico es requerido.',
+                'email.email' => 'El correo electronico no tiene el formato correcto.',
+            ];
+    
+            if(isset($inputs['id']) && $inputs['id'] != $id){
+                $reglas['id'] = 'required|unique:donadores';
+            }
+    
+            $resultado = Validator::make($inputs,$reglas,$mensajes);
+    
+            if ($resultado->fails()) {
+                return response()->json(['mensaje' => 'Error en los datos del formulario', 'validacion'=>$resultado->passes(), 'errores'=>$resultado->errors()], HttpResponse::HTTP_CONFLICT);
+            }else{
+    
+                DB::beginTransaction();
+    
+                $donante = Donador::with('entidad_federativa', 'seguro')->find($id);
+    
+                $donante->id                            = $inputs['id'];
+                $donante->codigo                        = $inputs['codigo'];
+                $donante->nombre                        = $inputs['nombre'];
+                $donante->apellido_paterno              = $inputs['apellido_paterno'];
+                $donante->apellido_materno              = $inputs['apellido_materno'];
+                $donante->fecha_nacimiento              = $inputs['fecha_nacimiento'];
+                $donante->edad                          = $inputs['edad'];
+                $donante->curp                          = $inputs['curp'];
+                $donante->sexo                          = $inputs['sexo'];
+                $donante->seguro_id                     = $inputs['seguro_id'];
+                $donante->seguro_otro                   = $inputs['seguro_otro'];
+                $donante->entidad_federativa_id         = $inputs['entidad_federativa_id'];
+                $donante->ciudad                        = $inputs['ciudad'];
+                $donante->codigo_postal                 = $inputs['codigo_postal'];
+                $donante->email                         = $inputs['email'];
+                $donante->telefono_contacto             = $inputs['telefono_contacto'];
+    
+                if($donante){
+                    $donante->save();
+                    DB::commit();
+                    return response()->json(['data'=>$donante], HttpResponse::HTTP_OK);
+                }else{
+                    DB::rollback();
+                    return response()->json(['error'=>'No se pudo editar el Donante'], HttpResponse::HTTP_CONFLICT);
+                }
+            }
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return response()->json(['error'=>['message'=>$th->getMessage(),'line'=>$th->getLine()]], HttpResponse::HTTP_CONFLICT);
+        }
+        
     }
 
     /**

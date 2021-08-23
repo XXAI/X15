@@ -22,7 +22,8 @@ export class RegistroDonadorComponent implements OnInit {
   isValidatingCURP:boolean;
   CURP:string;
 
-  persona_id:number = 0;
+  donante_id:number = 0;
+  donante:any = {};
 
   catalogos: any = {};
   filteredCatalogs:any = {};
@@ -70,6 +71,7 @@ export class RegistroDonadorComponent implements OnInit {
     this.donadoresForm = this.fb.group ({
 
       id:[''],
+      codigo:[''],
       nombre:['',Validators.required],
       apellido_paterno:[''],
       apellido_materno:[''],
@@ -83,7 +85,7 @@ export class RegistroDonadorComponent implements OnInit {
       entidad_federativa_id:['7',Validators.required],
       seguro:[''],
       seguro_id:['',Validators.required],
-      //seguro_otro:[''],
+      seguro_otro:[''],
       email: ['', [Validators.required, Validators.email]],
       telefono_contacto:[''],
 
@@ -91,8 +93,10 @@ export class RegistroDonadorComponent implements OnInit {
 
     this.route.params.subscribe(params => {
       
-      this.persona_id = params['id'];
-      if(this.persona_id){
+      this.donante_id = params['id'];
+      if(this.donante_id){
+
+        this.obtenerDonante();
 
         console.log("hay un ID");
 
@@ -125,7 +129,8 @@ export class RegistroDonadorComponent implements OnInit {
       
         if(obj)
         {
-          //this.donadoresForm.get('entidad_federativa_id').setValue(obj.estado);
+          this.donadoresForm.get('entidad_federativa_id').setValue(obj.entidad_federativa);
+          this.donadoresForm.get('seguro_id').setValue(obj.seguro);
         }
         this.isLoading = false; 
       } 
@@ -204,9 +209,9 @@ export class RegistroDonadorComponent implements OnInit {
 
     this.isLoading = true;
 
-    if(this.persona_id > 0 ){
+    if(this.donante_id > 0 ){
 
-      this.publicService.updateDonante(this.persona_id, formData).subscribe(
+      this.publicService.updateDonante(this.donante_id, formData).subscribe(
         response =>{
           //this.dialogRef.close(true);
           this.isLoading = false;
@@ -216,7 +221,7 @@ export class RegistroDonadorComponent implements OnInit {
           Message = "Se Editaron los datos del Donante: "+" "+response.data.nombre+" "+response.data.apellido_paterno+" "+response.data.apellido_materno+" "+" con Éxito!";
 
           this.sharedService.showSnackBar(Message, 'Cerrar', 5000);
-          this.router.navigate(['/registro']);
+          this.router.navigate(['/donantes']);
 
         },
         errorResponse => {
@@ -262,6 +267,32 @@ export class RegistroDonadorComponent implements OnInit {
 
     }
 
+  }
+
+  obtenerDonante():void{
+    this.isLoading = true;
+    
+    this.publicService.getDonante(this.donante_id).subscribe(
+      response => {
+
+        this.donante = response.donante;        
+        this.donadoresForm.reset();
+        this.donadoresForm.patchValue(response.donante);
+        
+        this.calcularEdad();
+        this.IniciarCatalogos(response.donante);
+
+        this.isLoading = false;
+      },
+      errorResponse =>{
+        var errorMessage = "Ocurrió un error.";
+        if(errorResponse.status == 409){
+          errorMessage = errorResponse.error.message;
+        }
+        this.sharedService.showSnackBar(errorMessage, null, 3000);
+        this.isLoading = false;
+      }
+    );
   }
 
   reponseErrorsPaciente(errorResponse:any){

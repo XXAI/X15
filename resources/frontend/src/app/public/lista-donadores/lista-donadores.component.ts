@@ -75,7 +75,7 @@ export class ListaDonadoresComponent implements OnInit {
     '4':'swap_horizontal_circle' //en transferencia
   };
 
-  displayedColumns: string[] = ['nombre', 'edad', 'fecha_nacimiento', 'curp', 'qr'];
+  displayedColumns: string[] = ['nombre', 'edad', 'fecha_nacimiento', 'curp', 'opciones'];
   dataSource: any = [];
   dataSourceFilters: any = [];
 
@@ -159,7 +159,7 @@ export class ListaDonadoresComponent implements OnInit {
 
     this.maxDate = this.fechaActual;
 
-    this.loadPacientesData(event);
+    this.loadDonantesData(event);
     this.loadFilterCatalogs();
     //console.log(this.filteredDiagnosticos);
 
@@ -178,7 +178,7 @@ export class ListaDonadoresComponent implements OnInit {
     this.selectedItemIndex = -1;
     this.paginator.pageIndex = 0;
     this.paginator.pageSize = this.pageSize;
-    this.loadPacientesData(null);
+    this.loadDonantesData(null);
 
   }
 
@@ -289,7 +289,7 @@ export class ListaDonadoresComponent implements OnInit {
     }
   }
 
-  public loadPacientesData(event?:PageEvent){
+  public loadDonantesData(event?:PageEvent){
 
     this.isLoading = true;
     let params:any;
@@ -445,7 +445,7 @@ export class ListaDonadoresComponent implements OnInit {
       if(reponse){
         this.publicService.deleteDonante(id).subscribe(
           response => {
-            this.loadPacientesData(null);
+            this.loadDonantesData(null);
           }
         );
       }
@@ -549,7 +549,6 @@ export class ListaDonadoresComponent implements OnInit {
             this.stepperConfig.steps[0].status = 3;
             this.stepperConfig.steps[1].status = 2;
             this.stepperConfig.currentIndex = 1;
-            console.log("fecha save",fecha_reporte);
             const reportWorker = new ReportWorker();
             reportWorker.onmessage().subscribe(
               data => {
