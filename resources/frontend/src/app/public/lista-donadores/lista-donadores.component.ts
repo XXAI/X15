@@ -358,7 +358,7 @@ export class ListaDonadoresComponent implements OnInit {
           if(response.data.total > 0){
             this.dataSource = response.data.data;
             this.fechaActual = response.fecha_actual;
-            this.resultsLength = response.total;
+            this.resultsLength = response.data.total;
           }else{
             this.dataSource = [];
             this.resultsLength = 0;
