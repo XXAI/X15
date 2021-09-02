@@ -161,7 +161,7 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        return response()->json(['data'=>User::with('roles','permissions','direcciones','proyectos')->find($id)],HttpResponse::HTTP_OK);
+        return response()->json(['data'=>User::with('roles','permissions')->find($id)],HttpResponse::HTTP_OK);
     }
 
     /**
