@@ -154,8 +154,9 @@ export class FormComponent implements OnInit {
           //Ends: Roles
 
           //Starts: User
-          if(results[3]){
-            this.usuario = results[3];
+          if(results[2]){
+            console.log("aca", results[2]);
+            this.usuario = results[2];
             this.usuarioForm.patchValue(this.usuario);
 
             this.selectedAvatar = this.usuario.avatar;
